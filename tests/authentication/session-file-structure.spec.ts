@@ -4,33 +4,7 @@
 import { test, expect } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
-
-interface Cookie {
-  name: string;
-  value: string;
-  domain: string;
-  path: string;
-  expires?: number;
-  httpOnly?: boolean;
-  secure?: boolean;
-  sameSite?: string;
-}
-
-interface StorageItem {
-  name: string;
-  value: string;
-}
-
-interface Origin {
-  origin: string;
-  localStorage?: StorageItem[];
-  sessionStorage?: StorageItem[];
-}
-
-interface SessionState {
-  cookies: Cookie[];
-  origins?: Origin[];
-}
+import { Cookie, Origin, SessionState, StorageItem } from '../../interfaces';
 
 test.describe('Session File Structure Validation', () => {
   test('should validate auth.json has correct JSON structure', async ({ page, context }) => {

@@ -23,12 +23,12 @@ test.describe('Session Reuse and Persistence', () => {
     const page = await context.newPage();
 
     // 2. Navigate directly to the protected Orkla dashboard
-    await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=KAK&mi=DefaultDashboard');
+    await page.goto(process.env.DASHBOARD_URL as string);
     await page.waitForLoadState('networkidle');
 
     // 3. Verify user is already authenticated
     const pageUrl = page.url();
-    expect(pageUrl).toContain('orkla-uat2.sandbox.operations.dynamics.com');
+    expect(pageUrl).toContain(process.env.BASE_URL_DOMAIN as string);
 
     // 4. Verify dashboard loads without requiring login credentials
     const signInHeading = page.locator('h1:has-text("Sign in")');
@@ -64,17 +64,17 @@ test.describe('Session Reuse and Persistence', () => {
     const page = await context.newPage();
 
     // 1. Navigate to dashboard
-    await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=KAK&mi=DefaultDashboard');
+    await page.goto(process.env.DASHBOARD_URL as string);
     await page.waitForLoadState('networkidle');
 
     const initialUrl = page.url();
     console.log(`Initial page: ${initialUrl}`);
 
     // Verify authenticated
-    expect(initialUrl).toContain('orkla-uat2.sandbox.operations.dynamics.com');
+    expect(initialUrl).toContain(process.env.BASE_URL_DOMAIN as string);
 
     // 2. Navigate to another protected page (adjust URL based on app structure)
-    await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com');
+    await page.goto(process.env.DASHBOARD_URL as string);
     await page.waitForLoadState('networkidle');
 
     const secondUrl = page.url();
@@ -129,7 +129,7 @@ test.describe('Session Reuse and Persistence', () => {
     console.log(`Cookie names: ${cookieNames.join(', ')}`);
 
     // Navigate and verify cookies are used
-    await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=KAK&mi=DefaultDashboard');
+    await page.goto(process.env.DASHBOARD_URL as string);
     await page.waitForLoadState('networkidle');
 
     const finalUrl = page.url();
@@ -171,7 +171,7 @@ test.describe('Session Reuse and Persistence', () => {
     const page = await context.newPage();
 
     // Navigate and check if redirected to login
-    await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=KAK&mi=DefaultDashboard');
+    await page.goto(process.env.DASHBOARD_URL as string);
     await page.waitForLoadState('networkidle');
 
     const finalUrl = page.url();

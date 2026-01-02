@@ -22,7 +22,7 @@ test.describe('Session Management - Advanced Scenarios', () => {
     const page = await context.newPage();
 
     // Navigate to dashboard
-    await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=KAK&mi=DefaultDashboard');
+    await page.goto(process.env.DASHBOARD_URL as string);
     await page.waitForLoadState('networkidle');
 
     const initialUrl = page.url();
@@ -77,8 +77,8 @@ test.describe('Session Management - Advanced Scenarios', () => {
     const page2 = await context2.newPage();
 
     // Navigate both to dashboard
-    await page1.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=KAK&mi=DefaultDashboard');
-    await page2.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=KAK&mi=DefaultDashboard');
+    await page1.goto(process.env.DASHBOARD_URL as string);
+    await page2.goto(process.env.DASHBOARD_URL as string);
 
     await page1.waitForLoadState('networkidle');
     await page2.waitForLoadState('networkidle');
@@ -142,7 +142,7 @@ test.describe('Session Management - Advanced Scenarios', () => {
     });
 
     const page = await context.newPage();
-    await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=KAK&mi=DefaultDashboard');
+    await page.goto(process.env.DASHBOARD_URL as string);
     await page.waitForLoadState('networkidle');
 
     const url = page.url();
@@ -219,7 +219,7 @@ test.describe('Session Management - Advanced Scenarios', () => {
     const page = await context.newPage();
 
     // 1. Attempt to access protected resource
-    await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=KAK&mi=DefaultDashboard');
+    await page.goto(process.env.DASHBOARD_URL as string);
     await page.waitForLoadState('networkidle');
 
     // 2. Check current authentication status
@@ -286,7 +286,7 @@ test.describe('Session Management - Advanced Scenarios', () => {
     // Navigate all pages concurrently
     const navigationPromises = pages.map((page, index) => {
       return page
-        .goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=KAK&mi=DefaultDashboard')
+        .goto(process.env.DASHBOARD_URL as string)
         .then(() => page.waitForLoadState('networkidle'))
         .then(() => {
           const url = page.url();
