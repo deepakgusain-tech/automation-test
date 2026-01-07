@@ -6,7 +6,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 test.describe('Authentication - Primary Login Flow', () => {
-  test.only('should successfully login with valid credentials and store session', async ({
+  test('should successfully login with valid credentials and store session', async ({
     page,
     context,
     browser,
