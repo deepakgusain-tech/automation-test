@@ -12,7 +12,7 @@ test.describe('Vendor Creation Form Functionality', () => {
     await page.waitForTimeout(3000);
 
     // 3. Click the 'New' button in the toolbar
-    await page.getByRole('button', { name: /New/i }).click();
+    await page.locator('button[id="NewButton"]').click();
 
     // 4. Wait for the form container to appear (max 3 seconds)
     await page.waitForTimeout(2000);
@@ -25,7 +25,7 @@ test.describe('Vendor Creation Form Functionality', () => {
     await expect(formHeading).toBeVisible();
 
     // 7. Verify the vendor list grid is no longer visible or has been replaced with the form
-    const generalSection = page.getByRole('button', { name: /General/i });
+    const generalSection = page.locator('button[id*="TabGeneral_caption"]');
     await expect(generalSection).toBeVisible();
 
     // 8. Verify a heading appears indicating 'New Record'
