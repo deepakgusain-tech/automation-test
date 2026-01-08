@@ -13,6 +13,41 @@ test.describe('Customer List Page - New Button Functionality', () => {
     // Wait for the Create customer dialog to load
     await expect(page.getByRole('heading', { name: 'Create customer' })).toBeVisible();
 
-    
+    // Verify the 'Details' section header is visible and expanded by default
+    const detailsHeader = page.locator('button:has-text("Details")').first();
+    await expect(detailsHeader).toBeVisible();
+    await expect(detailsHeader).toHaveAttribute('aria-expanded', 'true');
+
+    // Verify Customer account field is focused by default (marked as active)
+    const customerAccountField = page.locator('combobox[class*="Customer account"]').first();
+    await expect(customerAccountField).toBeFocused();
+
+    // Verify Type field shows 'Organization' as the default value
+    const typeField = page.locator('combobox:has-text("Organization")').first();
+    await expect(typeField).toHaveValue('Organization');
+
+    // Verify Currency field shows 'GBP' as the default value
+    const currencyField = page.locator('combobox:has-text("GBP")').first();
+    await expect(currencyField).toHaveValue('GBP');
+
+    // Verify all required fields are visible
+    const fields = [
+      'Customer account',
+      'Type',
+      'Name',
+      'Customer group',
+      'Currency',
+      'Terms of payment',
+      'Delivery terms',
+      'Mode of delivery',
+      'Sales tax group',
+      'Tax exempt number',
+      'Source code'
+    ];
+
+    for (const fieldName of fields) {
+      const field = page.locator(`[class*="label"]:has-text("${fieldName}")`).first();
+      await expect(field).toBeVisible();
+    }
   });
 });

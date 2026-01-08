@@ -98,3 +98,4 @@ test.describe('Customer List Page - New Button Functionality', () => {
         await saveAndOpenButton.click();
     });
 });
+ 

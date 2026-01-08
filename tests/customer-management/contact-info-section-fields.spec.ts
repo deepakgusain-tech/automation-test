@@ -13,6 +13,33 @@ test.describe('Customer List Page - New Button Functionality', () => {
     // Wait for the Create customer dialog to load
     await expect(page.getByRole('heading', { name: 'Create customer' })).toBeVisible();
 
-   
+    // Verify the 'Contact information' section header is visible and expanded by default
+    const contactHeader = page.locator('button:has-text("Contact information")').first();
+    await expect(contactHeader).toBeVisible();
+    await expect(contactHeader).toHaveAttribute('aria-expanded', 'true');
+
+    // Verify all contact information fields are visible
+    const contactFields = [
+      'Phone',
+      'Extension',
+      'Fax',
+      'Email address'
+    ];
+
+    for (const fieldName of contactFields) {
+      const field = page.locator(`[class*="label"]:has-text("${fieldName}")`).first();
+      await expect(field).toBeVisible();
+    }
+
+    // Verify all contact fields are text input fields
+    const phoneField = page.locator('textbox:near(:text("Phone"))').first();
+    const extensionField = page.locator('textbox:near(:text("Extension"))').first();
+    const faxField = page.locator('textbox:near(:text("Fax"))').first();
+    const emailField = page.locator('textbox:near(:text("Email address"))').first();
+
+    await expect(phoneField).toBeVisible();
+    await expect(extensionField).toBeVisible();
+    await expect(faxField).toBeVisible();
+    await expect(emailField).toBeVisible();
   });
 });
