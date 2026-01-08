@@ -58,6 +58,7 @@ test.describe('Vendor Creation Form Functionality', () => {
     await currencyField.click();
     await page.waitForTimeout(500);
 
+
     // 10. Verify GBP is available and can be selected
     const gbpOption = page.locator('[role="option"]:has-text("GBP")');
     const isGBPVisible = await gbpOption.isVisible().catch(() => false);
