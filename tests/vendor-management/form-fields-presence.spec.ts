@@ -129,7 +129,9 @@ test.describe('Vendor Creation Form Functionality', () => {
 
     const contactInfoTypeField = page.locator('input[id*="ContactInfo_Type"]').nth(0);
     await expect(contactInfoTypeField).toBeVisible();
-    contactInfoTypeField.fill("Email Address");
+    await contactInfoTypeField.click();
+    await contactInfoTypeField.pressSequentially('Email Address', { delay: 100 });
+    await page.keyboard.press('Enter');
 
     const contactInfoContactNumberOrEmailField = page.locator('input[id*="ContactInfo_Locator"]').nth(0);
     await expect(contactInfoContactNumberOrEmailField).toBeVisible();
@@ -180,13 +182,13 @@ test.describe('Vendor Creation Form Functionality', () => {
     // Close the tax VAT numbers form by clicking the Back button to return to the main vendor form
     await page.locator('button[id*="TaxVATNumTable_"][id*="SystemDefinedCloseButton"]').click();
     taxExemptField.fill(vendorName);
-    
-     // Verify that the form has a Save button available in the toolbar
+
+    // Verify that the form has a Save button available in the toolbar
     const saveButton = page.getByRole('button', { name: /Save/i });
     await expect(saveButton).toBeVisible();
     saveButton.click();
 
-    
+
     // - Payment section
     // Scroll to ensure the Payment button is in view
     await page.locator('button[aria-label="Payment"]').scrollIntoViewIfNeeded();
@@ -197,20 +199,20 @@ test.describe('Vendor Creation Form Functionality', () => {
     await expect(paymentPaymTermIdInput).toBeVisible();
     paymentPaymTermIdInput.fill("Net60");
 
-     await page.waitForTimeout(30000);
+    await page.waitForTimeout(30000);
 
     const paymentDlvTermIdInput = page.locator('input[id*="Delivery_DlvTerm_input"]').nth(0);
     await expect(paymentDlvTermIdInput).toBeVisible();
     paymentDlvTermIdInput.fill("DAP");
 
-     await page.waitForTimeout(30000);
-    
+    await page.waitForTimeout(30000);
+
     // Wait for any blocking overlay to disappear before clicking save
     await page.locator('#ShellBlockingDiv').waitFor({ state: 'hidden' });
-    
+
     // save button
     await saveButton.click();
 
-   
+
   });
 });
