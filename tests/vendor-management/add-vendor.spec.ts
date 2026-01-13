@@ -115,8 +115,8 @@ test.describe('Vendor Creation Form Functionality', () => {
     cityField.fill("Leominster");
 
     // address save button in the address form
-    const addressSaveButton = page.locator('[id*="PostalAddress"], [class*="button-label"]').first();
-    await expect(addressSaveButton).toBeVisible();
+    const saveAndOpenButton = page.locator('button[id*="OKButton"]').first();;
+    await saveAndOpenButton.click();
 
     // - contact form (with Add button)
     const contactAddButton = page.locator('[id*="NewContactInfo"]').first();
@@ -138,20 +138,18 @@ test.describe('Vendor Creation Form Functionality', () => {
     contactInfoContactNumberOrEmailField.fill("RichardBagwell@ovgrp.com")
 
     // edit contact infomation
-    const contactDetailEInfoButton = page.locator('[id*="DetailContactInfo"]').first();
+    const contactDetailEInfoButton = page.getByRole('button', { name: /Edit contact information/i });
     await expect(contactDetailEInfoButton).toBeVisible();
     await contactDetailEInfoButton.click();
 
     // save edit contact information
-    const contactEditSaveButton = page.locator('[id*="LogisticsContactInfo"]').first();
-    await expect(contactEditSaveButton).toBeVisible();
-    await contactEditSaveButton.click();
+    const saveContactInfoButton = page.getByRole('button', { name: /OK/i });
+    await saveContactInfoButton.click();
 
     // purchasing demographics tab
     const employeeResponsibleField = page.locator('input[aria-labelledby*="MainContactWorker"]').nth(0);
     await expect(employeeResponsibleField).toBeVisible();
     employeeResponsibleField.fill("Mark dutton");
-
 
     // invoice and delivery tab
     // - tax exempt number
@@ -205,14 +203,12 @@ test.describe('Vendor Creation Form Functionality', () => {
     await expect(paymentDlvTermIdInput).toBeVisible();
     paymentDlvTermIdInput.fill("DAP");
 
-    await page.waitForTimeout(30000);
+    await page.waitForTimeout(2000);
 
     // Wait for any blocking overlay to disappear before clicking save
     await page.locator('#ShellBlockingDiv').waitFor({ state: 'hidden' });
 
     // save button
     await saveButton.click();
-
-
   });
 });
