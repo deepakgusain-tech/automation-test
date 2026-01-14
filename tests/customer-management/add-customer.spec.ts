@@ -2,7 +2,6 @@
 // seed: tests/seed.spec.ts
 
 import { test, expect } from '@playwright/test';
-import { Verify } from 'crypto';
 const fs = require('fs');
 const path = require('path');
 
