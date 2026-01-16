@@ -66,7 +66,8 @@ export default class UIElement {
      * Click an element by button selector
      */
     async button(buttonName: string) {
-        const element = this.page.getByRole('button', { name: new RegExp(buttonName, 'i') }).first();
+        const element = this.page.getByRole('button', { name: new RegExp(buttonName, 'i'), exact: true }).first();
+        await expect(element).toBeEnabled({ timeout: 60000 });
         await element.click();
     }
 
@@ -95,7 +96,6 @@ export default class UIElement {
     /**
        * Lookup field selection with click icon
        * @param fieldSelector - The input field selector
-       * @param iconSelector - The selector for the lookup icon/button
        * @param value - The item to select from the dropdown
        */
     async lookupSelectWithIcon(fieldSelector: string, value: string) {
@@ -119,6 +119,23 @@ export default class UIElement {
 
         const inputField = this.page.locator(`input[value="${value}"]:visible`).first();
         await inputField.click({ force: true });
+    }
+
+    /**
+       * Lookup field selection with click icon
+       * @param fieldSelector - The input field selector
+       * @param value - The item to select from the dropdown
+       */
+    async viewLookup(fieldSelector: string, value: string) {
+        const field = this.page.locator(fieldSelector).first();
+        await expect(field).toBeVisible();
+
+        const icon = field.locator('..').locator('[class*="lookup"]').first();
+        await icon.click({ button: 'right' });
+
+        const viewDetails = this.page.getByRole('menuitem', { name: value });
+        await expect(viewDetails).toBeVisible();
+        await viewDetails.click();
     }
 
     async filterOption(mainSelector: string, inputSelector: string, value: string) {

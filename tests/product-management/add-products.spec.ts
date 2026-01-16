@@ -121,7 +121,6 @@ test.describe('Product List Page', () => {
 
         // await ui.lookupSelectWithIcon('input[id*="PdsApprovedVendorList_PdsApprovedVendor"]', "S1604");
 
-
         await ui.button('Save');
 
         await ui.backButton();
