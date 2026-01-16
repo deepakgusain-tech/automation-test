@@ -1,5 +1,4 @@
-// uiElement.ts
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 const fs = require('fs');
 const path = require('path');
 
@@ -17,15 +16,24 @@ export default class UIElement {
         return this.page.locator(selector);
     }
 
+    async getLocatorValue(selector: string): Promise<string> {
+        return await this.page.locator(selector).first().inputValue();
+    }
+
     /**
      * Fill input (handles readonly fields as well)
      */
     async inputSelector(selector: string, value: string) {
-        const element = this.getLocator(selector);
-        await element.waitFor({ state: 'visible' });
+        const element = this.page.locator(selector).first();
+        await expect(element).toBeVisible();
 
         const isReadonly = await element.getAttribute('readonly');
+
+        await element.click();
+
         if (isReadonly !== null) {
+            await this.page.keyboard.press('Control+A');
+            await this.page.keyboard.press('Delete');
             await this.page.keyboard.type(value);
             await this.page.keyboard.press('Enter');
         } else {
@@ -47,15 +55,28 @@ export default class UIElement {
      * Click an element by button selector
      */
     async backButton() {
-        const element = this.getLocator('[class*="Back-symbol"]').first();
-        await element.click();
-    }
+        const backBtn = this.page.locator(
+            '[data-dyn-controlname="SystemDefinedCloseButton"]:visible'
+        ).first();
 
+        await backBtn.waitFor({ timeout: 30000 });
+        await backBtn.click();
+    }
     /**
      * Click an element by button selector
      */
     async button(buttonName: string) {
         const element = this.page.getByRole('button', { name: new RegExp(buttonName, 'i') }).first();
+        await element.click();
+    }
+
+    /**
+    * Click an element by button selector
+    */
+    async clickElement(selector: string) {
+        const element = this.getLocator(selector).first()
+        // const html = await element.evaluate(el => el.outerHTML);
+        // console.log(html);
         await element.click();
     }
 
@@ -67,7 +88,7 @@ export default class UIElement {
     async selectBox(selector: string, option: string) {
         const element = this.page.locator(selector).first();
         await element.click();
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForLoadState('networkidle');
         await this.page.getByRole('option', { name: option }).click();
     }
 
@@ -78,43 +99,45 @@ export default class UIElement {
        * @param value - The item to select from the dropdown
        */
     async lookupSelectWithIcon(fieldSelector: string, value: string) {
-        const field = this.getLocator(fieldSelector);
-
-        const icon = field.locator('..').locator('[class*="lookup"]').first();
-        await icon.click();
-
-        await this.page.waitForTimeout(2000);
+        const field = this.getLocator(fieldSelector).nth(0);
 
         await field.fill("");
 
-        this.page.waitForTimeout(2000);
+        await field.evaluate(node => {
+            (node.nextElementSibling as HTMLElement)?.click();
+        });
 
-        for (const char of value) {
-            await field.press(char);  // press each key
-            await this.page.waitForTimeout(100); // optional, makes it more "human-like"
-        }
-
-        const inputField = this.page.locator(`input[title="${value}"]`).first();
-        await inputField.click();
-    }
-
-    async filterOption(selector: string, value: string) {
-        await this.page.locator(selector).first().click();
+        // const icon = field.locator('..').locator('[class*="lookup"]').first();
+        // await icon.click();
 
         await this.page.waitForTimeout(2000);
 
+        for (const char of value) {
+            await field.press(char);
+            await this.page.waitForTimeout(100);
+        }
+
+        const inputField = this.page.locator(`input[value="${value}"]:visible`).first();
+        await inputField.click({ force: true });
+    }
+
+    async filterOption(mainSelector: string, inputSelector: string, value: string) {
+        await this.page.locator(mainSelector).first().click();
+
+        await this.page.waitForLoadState('networkidle');
+
         if (value) {
-            await this.page.locator('input[id*="DataAreaGrid_DataArea_Input"]').first().fill(value);
+            await this.page.locator(inputSelector).first().fill(value);
 
         } else {
             await this.page.getByRole('button', { name: ' Sort Z to A' }).click();
         }
 
-        await this.page.waitForTimeout(5000);
+        await this.page.waitForLoadState('networkidle');
 
         await this.page.getByRole('button', { name: 'Apply' }).click();
 
-        await this.page.waitForTimeout(5000);
+        await this.page.waitForLoadState('networkidle');
 
         const inputField = this.page.locator(`input[value="${value}"]`).first();
         await inputField.click();
