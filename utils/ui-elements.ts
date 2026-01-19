@@ -66,7 +66,7 @@ export default class UIElement {
      * Click an element by button selector
      */
     async button(buttonName: string) {
-        const element = this.page.getByRole('button', { name: new RegExp(buttonName, 'i'), exact: true }).first();
+        const element = this.page.getByRole('button', { name: new RegExp(buttonName, 'i') }).first();
         await expect(element).toBeEnabled({ timeout: 60000 });
         await element.click();
     }
@@ -76,8 +76,8 @@ export default class UIElement {
     */
     async clickElement(selector: string) {
         const element = this.getLocator(selector).first()
-        // const html = await element.evaluate(el => el.outerHTML);
-        // console.log(html);
+        const html = await element.evaluate(el => el.outerHTML);
+        console.log(html);
         await element.click();
     }
 
@@ -101,7 +101,16 @@ export default class UIElement {
     async lookupSelectWithIcon(fieldSelector: string, value: string) {
         const field = this.getLocator(fieldSelector).nth(0);
 
-        await field.fill("");
+
+        await this.page.waitForTimeout(2000);
+
+        let prevFilledValue = await field.inputValue();
+        
+        if(prevFilledValue) {
+            await field.fill('');
+        }
+        
+        // await field.evaluate(el => (el as HTMLInputElement).value = '');
 
         await field.evaluate(node => {
             (node.nextElementSibling as HTMLElement)?.click();
@@ -112,10 +121,17 @@ export default class UIElement {
 
         await this.page.waitForTimeout(2000);
 
-        for (const char of value) {
-            await field.press(char);
-            await this.page.waitForTimeout(100);
+        if (isFinite(Number(value))) {
+            await field.fill(value)
+        } else {
+            for (const char of value) {
+                console.log(char);
+                
+                await field.press(char);
+                await this.page.waitForTimeout(1000);
+            }
         }
+
 
         const inputField = this.page.locator(`input[value="${value}"]:visible`).first();
         await inputField.click({ force: true });
@@ -158,5 +174,9 @@ export default class UIElement {
 
         const inputField = this.page.locator(`input[value="${value}"]`).first();
         await inputField.click();
+    }
+
+    async close() {
+        this.page.close();
     }
 }
