@@ -132,7 +132,6 @@ export default class UIElement {
             }
         }
 
-
         const inputField = this.page.locator(`input[value="${value}"]:visible`).first();
         await inputField.click({ force: true });
     }
@@ -154,6 +153,12 @@ export default class UIElement {
         await viewDetails.click();
     }
 
+    /**
+       * Lookup field selection with click icon
+       * @param mainSelector - The input field selector
+       * @param inputSelector - The input field selector
+       * @param value - The item to select from the dropdown
+       */
     async filterOption(mainSelector: string, inputSelector: string, value: string) {
         await this.page.locator(mainSelector).first().click();
 

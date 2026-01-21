@@ -23,8 +23,6 @@ test.describe('Purchase Order Creation', () => {
       return
     }
 
-    console.log(getPO);
-
     await ui.lookupSelectWithIcon('input[id*="PurchTable_InventSiteId_input"]', 'LE');
 
     await ui.lookupSelectWithIcon('input[id*="PurchTable_InventLocationId_input"]', 'LE');
@@ -39,25 +37,25 @@ test.describe('Purchase Order Creation', () => {
 
     await ui.button('Save');
 
-    // await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('networkidle');
 
-    // await ui.clickElement('[id*="Purchase_button"]');
+    await ui.clickElement('[id*="Purchase_button"]');
 
-    // await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('networkidle');
 
-    // await ui.button('Purchase inquiry');
+    await ui.button('Purchase inquiry');
 
-    // await ui.button('OK');
+    await ui.button('OK');
 
-    // await ui.lookupSelectWithIcon('input[id*="PurchLine_PurchUnitGrid"]', 'kg');
+    await ui.lookupSelectWithIcon('input[id*="PurchLine_PurchUnitGrid"]', 'kg');
 
-    // await ui.button('Save');
+    await ui.button('Save');
 
-    // await ui.clickElement('[id*="Purchase_button"]');
+    await ui.clickElement('[id*="Purchase_button"]');
 
-    // await ui.button('Confirm');
+    await ui.button('Confirm');
 
-    // await ui.button('OK');
+    await ui.button('OK');
 
     await ui.clickElement('[id*="LineStripUpdate_label"]')
 
@@ -78,7 +76,7 @@ test.describe('Purchase Order Creation', () => {
 
     // Now work on the details page
 
-    // await ui.backButton();
+    await ui.backButton();
 
     // await ui.button("Receive");
 
