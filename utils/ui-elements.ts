@@ -54,11 +54,8 @@ export default class UIElement {
     /**
      * Click an element by button selector
      */
-    async backButton() {
-        const backBtn = this.page.locator(
-            '[data-dyn-controlname="SystemDefinedCloseButton"]:visible'
-        ).first();
-
+    async backButton(step : number = 0) {
+        const backBtn = this.page.locator('[class*="Back-symbol"]').nth(step);
         await backBtn.waitFor({ timeout: 3000 });
         await backBtn.click();
     }
@@ -100,7 +97,7 @@ export default class UIElement {
        */
     async lookupSelectWithIcon(fieldSelector: string, value: string) {
         console.log(value);
-        
+
         const field = this.getLocator(fieldSelector).nth(0);
 
         await this.page.waitForTimeout(1000);
