@@ -1,6 +1,3 @@
-// spec: specs/vendor-creation-form-test-plan.md
-// seed: tests/seed.spec.ts
-
 import { test, expect } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
 

@@ -47,14 +47,14 @@ export default class UIElement {
     async getInputValue(selector: string): Promise<string | void> {
         const input = this.getLocator(selector).first();
         const value = await input.inputValue();
-        fs.writeFileSync(path.join(__dirname, 'product.txt'), value);
+        // fs.writeFileSync(path.join(__dirname, 'product.txt'), value);
         return value
     }
 
     /**
      * Click an element by button selector
      */
-    async backButton(step : number = 0) {
+    async backButton(step: number = 0) {
         const backBtn = this.page.locator('[class*="Back-symbol"]').nth(step);
         await backBtn.waitFor({ timeout: 3000 });
         await backBtn.click();
@@ -90,17 +90,33 @@ export default class UIElement {
         await this.page.getByRole('option', { name: option }).click();
     }
 
+    async lookupSelect(fieldSelector: string, value: string) {
+
+        const field = this.getLocator(fieldSelector).first();
+
+        const html = await field.evaluate(el => el.outerHTML);
+        console.log(html);
+
+        await this.page.waitForTimeout(1000);
+
+        await field.fill(value);
+
+        const inputField = this.page.locator(`input[value="${value}"]`).first();
+        await inputField.click({ force: true });
+    }
+
     /**
        * Lookup field selection with click icon
        * @param fieldSelector - The input field selector
        * @param value - The item to select from the dropdown
        */
     async lookupSelectWithIcon(fieldSelector: string, value: string) {
-        console.log(value);
 
         const field = this.getLocator(fieldSelector).nth(0);
 
         await this.page.waitForTimeout(1000);
+
+        console.log(await field.getAttribute('readonly'));
 
         await field.evaluate(node => {
             (node.nextElementSibling as HTMLElement)?.click();

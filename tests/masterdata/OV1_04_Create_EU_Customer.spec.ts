@@ -1,6 +1,3 @@
-// spec: specs/customer-list-new-button-test-plan.md
-// seed: tests/seed.spec.ts
-
 import { test, expect } from "@playwright/test";
 import UIElement from "../../utils/ui-elements";
 const fs = require("fs");

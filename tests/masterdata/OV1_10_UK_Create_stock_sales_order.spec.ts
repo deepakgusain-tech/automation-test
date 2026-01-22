@@ -3,8 +3,8 @@ import UIElement from '../../utils/ui-elements';
 const fs = require('fs');
 const path = require('path');
 
-test.describe('stock sales order', () => {
-    test('Create Sales test case', async ({ page }) => {
+test.describe('OV1_10_UK_Create_stock_sales_order', () => {
+    test('OV1_10_UK', async ({ page }) => {
         await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=SalesTableListPage');
 
         let ui: UIElement | null = new UIElement(page);
