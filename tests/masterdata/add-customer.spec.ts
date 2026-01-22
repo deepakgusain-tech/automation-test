@@ -58,7 +58,7 @@ test.describe('Customer List Page', () => {
 
         const taxExemptField = page.locator('select[aria-labelledby*="VATNum"], input[aria-labelledby*="VATNum"]').first();
         await expect(taxExemptField).toBeVisible();
-        
+
         const taxExemptArrowButton = taxExemptField.locator('..').locator('div[class*="lookupDock-buttonContainer"]');
         await expect(taxExemptArrowButton).toBeVisible();
         await taxExemptArrowButton.click({ button: 'right' });
@@ -97,12 +97,12 @@ test.describe('Customer List Page', () => {
         await saveAndOpenButton.click();
 
         // Wait for the customer to be saved and the form to process
-        await page.waitForLoadState('networkidle', { timeout: 30000 }).catch(() => {});
+        await page.waitForLoadState('networkidle', { timeout: 30000 }).catch(() => { });
 
         // Wait a moment before proceeding
         await page.waitForTimeout(2000);
 
-     
+
         // Wait for the addresses grid to be visible
         const addAddressButton = page.locator('[id*="NewAddress_label"]').first();
         await expect(addAddressButton).toBeVisible();
@@ -134,7 +134,7 @@ test.describe('Customer List Page', () => {
         const saveAddressButton = page.getByRole('button', { name: /OK/ });
         await saveAddressButton.click();
 
-        
+
         // contact info section
         await page.locator('[id*="NewContactInfo_label"]').first().click();
 
