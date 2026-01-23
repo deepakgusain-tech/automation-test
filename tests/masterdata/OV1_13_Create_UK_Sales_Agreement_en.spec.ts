@@ -1,10 +1,8 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
-const fs = require('fs');
-const path = require('path');
 
-test.describe('OV01_08', () => {
-    test('Sales Agreement', async ({ page }) => {
+test.describe('OV01_13', () => {
+    test('UK Sales Agreement', async ({ page }) => {
 
         await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=SalesAgreementListPage');
 
@@ -34,15 +32,23 @@ test.describe('OV01_08', () => {
 
         await ui.lookupSelectWithIcon('input[id*="AgreementLine_ItemId"]', itemNumber)
 
-        await ui.inputSelector('input[id*="AgreementLine_AgreementLineQuantityCommitment_CommitedQuantity"]', "1000")
-        
-        await ui.lookupSelectWithIcon('input[id*="AgreementLine_AgreementLineQuantityCommitment_ProductUnitOfMeasure"]', "kg")
+        await ui.lookupSelectWithIcon('input[id*="Warehouse_InventLocationId"]', "LE")
 
-        await ui.inputSelector('input[id*="AgreementLine_AgreementLineQuantityCommitment_PricePerUnit"]', "10")
+        await ui.inputSelector('input[id*="AgreementLine_AgreementLineQuantityCommitment_CommitedQuantity"]', "500")
+        
+        await ui.inputSelector('input[id*="AgreementLine_AgreementLineQuantityCommitment_PricePerUnit"]', "6")
 
         await ui.inputSelector('input[id*="AgreementLine_ExpirationDate"]', '01/31/2026')
 
         await page.waitForTimeout(1000)
+
+        await ui.button("Sales agreement")
+
+        await ui.button("Release order")
+
+        await page.waitForTimeout(2000)
+
+        await ui.button("Create")
 
         await ui.button("Save")
 

@@ -86,20 +86,23 @@ export default class UIElement {
     async selectBox(selector: string, option: string) {
         const element = this.page.locator(selector).first();
         await element.click();
-        await this.page.waitForLoadState('networkidle');
+
+        await this.page.waitForTimeout(1000);
+
         await this.page.getByRole('option', { name: option }).click();
     }
 
     async lookupSelect(fieldSelector: string, value: string) {
 
-        const field = this.getLocator(fieldSelector).first();
+        const field = this.page.getByLabel(fieldSelector).first();
 
-        const html = await field.evaluate(el => el.outerHTML);
-        console.log(html);
+        field.click();
+
+        await field.evaluate(node => {
+            (node.nextElementSibling as HTMLElement)?.click();
+        });
 
         await this.page.waitForTimeout(1000);
-
-        await field.fill(value);
 
         const inputField = this.page.locator(`input[value="${value}"]`).first();
         await inputField.click({ force: true });
@@ -115,8 +118,6 @@ export default class UIElement {
         const field = this.getLocator(fieldSelector).nth(0);
 
         await this.page.waitForTimeout(1000);
-
-        console.log(await field.getAttribute('readonly'));
 
         await field.evaluate(node => {
             (node.nextElementSibling as HTMLElement)?.click();
