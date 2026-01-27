@@ -1,10 +1,5 @@
-// spec: specs/customer-list-new-button-test-plan.md
-// seed: tests/seed.spec.ts
-
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
-const fs = require('fs');
-const path = require('path');
 
 test.describe('OV1_07', () => {
     test('Create Manufactured Product', async ({ page }) => {
@@ -75,7 +70,7 @@ test.describe('OV1_07', () => {
         await ui.button('Finish');
 
         // step 19
-        await ui.backButton();
+        await ui.backButton(1);
 
         // step 20
         ui = null;
@@ -124,7 +119,7 @@ test.describe('OV1_07', () => {
 
         await ui.button('Save');
 
-        await ui.backButton();
+        await ui.backButton(1);
 
         await ui.lookupSelectWithIcon('input[id*="PurchaseAdministration_PrimaryVendorId_input"]', "S0016");
 
@@ -168,7 +163,7 @@ test.describe('OV1_07', () => {
 
         await ui.button('Ok');
 
-        await ui.backButton()
+        await ui.backButton(1)
 
         await page.waitForTimeout(5000);
 

@@ -61,6 +61,8 @@ test.describe('OV1_01', () => {
 
     await ui.inputSelector('input[id*="ContactInfo_Locator"]', "RichardBagwell@ovgrp.com");
 
+    await page.waitForTimeout(2000);
+
     await ui.button("Edit contact information");
 
     await page.waitForTimeout(2000);
@@ -69,7 +71,7 @@ test.describe('OV1_01', () => {
 
     await ui.button('OK');
 
-    await ui.lookupSelectWithIcon('input[aria-labelledby*="MainContactWorker"]', "Mark dutton")
+    await ui.lookupSelectWithIcon('input[aria-labelledby*="MainContactWorker"]', "Mark Dutton")
 
     await ui.viewLookup('select[aria-labelledby*="SalesTax_VATNum"], input[aria-labelledby*="SalesTax_VATNum"]', 'View details');
 
@@ -78,7 +80,6 @@ test.describe('OV1_01', () => {
     await ui.lookupSelectWithIcon('input[id*="TaxVATNumTable_CountryRegionId"]', 'GBR');
 
     await ui.inputSelector('input[id*="TaxVATNumTable_VATNum"]', vendorName);
-
 
     await ui.clickElement('button[id*="TaxVATNumTable_"][id*="SystemDefinedCloseButton"]');
 

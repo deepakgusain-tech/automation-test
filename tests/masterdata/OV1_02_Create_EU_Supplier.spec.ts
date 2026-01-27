@@ -24,7 +24,8 @@ test.describe('OV1_02', () => {
     console.log(vendorAccountField);
 
     const vendorName = "OV1EUSUP" + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-
+    console.log(vendorName);
+    
     await ui.inputSelector('input[aria-labelledby*="Name"]', vendorName)
 
     await ui.inputSelector('input[aria-labelledby*="NameAlias"]', vendorName)
@@ -53,13 +54,13 @@ test.describe('OV1_02', () => {
 
     await ui.clickElement('[id*="NewContactInfo"]')
 
-
     await ui.inputSelector('input[id*="ContactInfo_Description"]', 'Harry Bo');
-
 
     await ui.lookupSelectWithIcon('input[id*="ContactInfo_Type"]', 'Email Address');
 
     await ui.inputSelector('input[id*="ContactInfo_Locator"]', "RichardBagwell@ovgrp.com");
+
+    await page.waitForTimeout(2000);
 
     await ui.button("Edit contact information");
 

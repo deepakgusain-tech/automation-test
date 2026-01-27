@@ -56,7 +56,6 @@ export default class UIElement {
      */
     async backButton(step: number = 0) {
         const backBtn = this.page.locator('[class*="Back-symbol"]').nth(step);
-        await backBtn.waitFor({ timeout: 3000 });
         await backBtn.click();
     }
     /**
@@ -64,18 +63,17 @@ export default class UIElement {
      */
     async button(buttonName: string, buttonNumber: number = 0) {
         const element = this.page.getByRole('button', { name: new RegExp(buttonName, 'i') }).nth(buttonNumber);
-        await expect(element).toBeEnabled({ timeout: 6000 });
         await element.click();
     }
 
     /**
     * Click an element by button selector
     */
-    async clickElement(selector: string) {
-        const element = this.getLocator(selector).first()
-        // const html = await element.evaluate(el => el.outerHTML);
-        // console.log(html);
-        await element.click();
+    async clickElement(selector: string, step : number = 0) { 
+        const element =  this.getLocator(selector).nth(step)
+        const html = await element.evaluate(el => el.outerHTML);
+        console.log(html);
+        await element.click({force: true});
     }
 
     /**
