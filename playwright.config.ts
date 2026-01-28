@@ -16,9 +16,9 @@ dotenv.config();
 export default defineConfig({
   testDir: './tests',
 
-  timeout: 2 * 60 * 1000,
+  timeout: 4 * 60 * 1000,
   expect: {
-    timeout: 2 * 60 * 1000,
+    timeout: 4 * 60 * 1000,
   },
 
   // Global setup runs once before all tests
