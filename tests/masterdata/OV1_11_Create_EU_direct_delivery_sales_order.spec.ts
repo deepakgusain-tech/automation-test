@@ -87,6 +87,8 @@ test.describe('OV01_11', () => {
 
         await ui.clickElement("li[id*='TabLineDelivery_header']", 1)
 
+        // work on this  Type value Script / SDCD to Confirmed receipt date
+
         const getDRD = await ui.getInputValue('input[id*="DeliveryDate_input"]')
 
         if (!getDRD) {
@@ -103,14 +105,14 @@ test.describe('OV01_11', () => {
 
         await ui.button("Confirm sales order")
 
-        await ui.lookupSelectWithIcon('select[aria-labelledby*="Print"], input[aria-labelledby*="Group"]', "After")
+        await ui.selectBox('input[id*="Print_Combo_input"]', "After")
 
         await ui.button('Ok');
 
-        await ui.button('Ok');
+        await page.waitForTimeout(2000)
+
+        await ui.button('Ok', 1);
 
         await page.waitForTimeout(10000);
-
-
     });
 });
