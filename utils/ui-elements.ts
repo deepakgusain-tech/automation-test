@@ -45,40 +45,35 @@ export default class UIElement {
     * get input value
     */
     async getInputValue(selector: string): Promise<string | void> {
-        const input = this.getLocator(selector);
+        const input = this.getLocator(selector).first();
         const value = await input.inputValue();
-        fs.writeFileSync(path.join(__dirname, 'product.txt'), value);
+        // fs.writeFileSync(path.join(__dirname, 'product.txt'), value);
         return value
     }
 
     /**
      * Click an element by button selector
      */
-    async backButton() {
-        const backBtn = this.page.locator(
-            '[data-dyn-controlname="SystemDefinedCloseButton"]:visible'
-        ).first();
-
-        await backBtn.waitFor({ timeout: 30000 });
+    async backButton(step: number = 0) {
+        const backBtn = this.page.locator('[class*="Back-symbol"]').nth(step);
         await backBtn.click();
     }
     /**
      * Click an element by button selector
      */
-    async button(buttonName: string) {
-        const element = this.page.getByRole('button', { name: new RegExp(buttonName, 'i') }).first();
-        await expect(element).toBeEnabled({ timeout: 60000 });
+    async button(buttonName: string, buttonNumber: number = 0) {
+        const element = this.page.getByRole('button', { name: new RegExp(buttonName, 'i') }).nth(buttonNumber);
         await element.click();
     }
 
     /**
     * Click an element by button selector
     */
-    async clickElement(selector: string) {
-        const element = this.getLocator(selector).first()
+    async clickElement(selector: string, step : number = 0) { 
+        const element =  this.getLocator(selector).nth(step)
         const html = await element.evaluate(el => el.outerHTML);
         console.log(html);
-        await element.click();
+        await element.click({force: true});
     }
 
     /**
@@ -89,8 +84,26 @@ export default class UIElement {
     async selectBox(selector: string, option: string) {
         const element = this.page.locator(selector).first();
         await element.click();
-        await this.page.waitForLoadState('networkidle');
+
+        await this.page.waitForTimeout(1000);
+
         await this.page.getByRole('option', { name: option }).click();
+    }
+
+    async lookupSelect(fieldSelector: string, value: string) {
+
+        const field = this.page.getByLabel(fieldSelector).first();
+
+        field.click();
+
+        await field.evaluate(node => {
+            (node.nextElementSibling as HTMLElement)?.click();
+        });
+
+        await this.page.waitForTimeout(1000);
+
+        const inputField = this.page.locator(`input[value="${value}"]`).first();
+        await inputField.click({ force: true });
     }
 
     /**
@@ -99,38 +112,27 @@ export default class UIElement {
        * @param value - The item to select from the dropdown
        */
     async lookupSelectWithIcon(fieldSelector: string, value: string) {
+
         const field = this.getLocator(fieldSelector).nth(0);
 
-
-        await this.page.waitForTimeout(2000);
-
-        let prevFilledValue = await field.inputValue();
-        
-        if(prevFilledValue) {
-            await field.fill('');
-        }
-        
-        // await field.evaluate(el => (el as HTMLInputElement).value = '');
+        await this.page.waitForTimeout(1000);
 
         await field.evaluate(node => {
             (node.nextElementSibling as HTMLElement)?.click();
         });
 
-        // const icon = field.locator('..').locator('[class*="lookup"]').first();
-        // await icon.click();
+        await this.page.waitForTimeout(1000);
 
-        await this.page.waitForTimeout(2000);
+        await field.click();
 
-        if (isFinite(Number(value))) {
-            await field.fill(value)
-        } else {
-            for (const char of value) {
-                console.log(char);
-                
-                await field.press(char);
-                await this.page.waitForTimeout(1000);
-            }
+        if ((await field.inputValue()).trim()) {
+            await field.press('Control+A');
+            await field.press('Backspace');
         }
+
+        await this.page.waitForTimeout(1000);
+
+        await this.page.keyboard.type(value, { delay: 1000 });
 
         const inputField = this.page.locator(`input[value="${value}"]:visible`).first();
         await inputField.click({ force: true });

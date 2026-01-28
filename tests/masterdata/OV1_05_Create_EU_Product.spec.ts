@@ -1,13 +1,15 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
+const fs = require('fs');
+const path = require('path');
 
-test.describe('OV1_07', () => {
-    test('Create Manufactured Product', async ({ page }) => {
+test.describe('OV1_05_Create_EU_Product', () => {
+    test('OV1_05', async ({ page }) => {
 
-        await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=EcoResDistinctProductListPage');
+        await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=EcoResProductListPage');
 
-        let ui : UIElement | null = new UIElement(page);
-        const productName = "V1MANUProduct" + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+        let ui: UIElement | null = new UIElement(page);
+        const productName = "OV1EUItemNumber" + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
 
         // step 1
         await ui.button('New');
@@ -22,10 +24,12 @@ test.describe('OV1_07', () => {
         await ui.lookupSelectWithIcon('input[id*="CustomProductLanguage_input"]', 'en-GB');
 
         // step 5
-        await ui.lookupSelectWithIcon('input[id*="CustomProductUnit_input"]', 'ea');
+        await ui.lookupSelectWithIcon('input[id*="CustomProductUnit_input"]', 'kg');
 
         // step 6
         const productNumber = await ui.getInputValue('input[id*="Identification_ProductNumber_input"]');
+
+        console.log(productNumber);
 
         // step 7
         await ui.button('OK');
@@ -39,7 +43,7 @@ test.describe('OV1_07', () => {
         await ui.lookupSelectWithIcon('input[id*="OwnerLegalEntity_input"]', 'OV01');
 
         // step 10
-        await ui.lookupSelectWithIcon('input[id*="OwnerGroup_input"]', "St Ives");
+        await ui.lookupSelectWithIcon('input[id*="OwnerGroup_input"]', "Tenbury Wells");
 
         await page.waitForLoadState('networkidle');
 
@@ -69,6 +73,8 @@ test.describe('OV1_07', () => {
         // step 18
         await ui.button('Finish');
 
+        await page.waitForTimeout(6000);
+
         // step 19
         await ui.backButton(1);
 
@@ -89,7 +95,7 @@ test.describe('OV1_07', () => {
 
         await ui.button('Apply template');
 
-        await ui.filterOption('[id*="TmpSysTableTemplate_Description"]', 'input[id*="TmpSysTableTemplate_Description_Description_Input"]', "Finished Goods EA (SI)");
+        await ui.filterOption('[id*="TmpSysTableTemplate_Description"]', 'input[id*="TmpSysTableTemplate_Description_Description_Input"]', "Traded Items Conf - KGs");
 
         await page.waitForLoadState('networkidle');
 
@@ -115,19 +121,23 @@ test.describe('OV1_07', () => {
 
         await page.waitForLoadState('networkidle');
 
-        await ui.lookupSelectWithIcon('input[id*="PdsApprovedVendorList_PdsApprovedVendor"]', "S0016");
+        await ui.lookupSelectWithIcon('input[id*="PdsApprovedVendorList_PdsApprovedVendor"]', "S1604");
 
         await ui.button('Save');
 
         await ui.backButton(1);
 
-        await ui.lookupSelectWithIcon('input[id*="PurchaseAdministration_PrimaryVendorId_input"]', "S0016");
+        await ui.lookupSelectWithIcon('input[id*="PurchaseAdministration_PrimaryVendorId_input"]', "S1604");
 
         await ui.selectBox('input[id*="InventTable_PdsVendorCheckItem_input"]', 'Not allowed');
 
-        await ui.lookupSelectWithIcon('input[id*="DefaultDropShipmentWarehouse_input"]', "SI");
+        await ui.clickElement('[id*="DropShipment_toggle"]')
 
-        await ui.button('Product');
+        await ui.lookupSelectWithIcon('input[id*="DefaultDropShipmentWarehouse_input"]', "TWD");
+
+        await ui.lookupSelectWithIcon('input[id*="OrigCountryRegionId_input"]', "DEU");
+
+         await ui.button('Product');
 
         await ui.button('Unit conversions');
 
@@ -141,7 +151,7 @@ test.describe('OV1_07', () => {
 
         await ui.lookupSelectWithIcon('input[id*="UnitOfMeasureConversionStandard_FromUnitOfMeasure_Symbol_input"]', "pl");
 
-        await ui.inputSelector('input[id*="UnitOfMeasureConversionStandard_Factor_input"]', "60.00");
+        await ui.inputSelector('input[id*="UnitOfMeasureConversionStandard_Factor_input"]', "40.00");
 
         await ui.lookupSelectWithIcon('input[id*="UnitOfMeasureConversionStandard_ToUnitOfMeasure_Symbol_input"]', "ea");
 
@@ -149,15 +159,15 @@ test.describe('OV1_07', () => {
 
         await ui.button('Ok');
 
-        await ui.clickElement('[id*="TOCPageConversionInterclass_header"]');
-
         await page.waitForTimeout(4000);
+
+        await ui.clickElement('[id*="TOCPageConversionInterclass_header"]');
 
         await ui.clickElement('[id*="AddButtonInterClass_label"]')
 
         await ui.lookupSelectWithIcon('input[id*="UnitOfMeasureConversionStandard_FromUnitOfMeasure_Symbol_input"]', "ea");
 
-        await ui.inputSelector('input[id*="UnitOfMeasureConversionStandard_Factor_input"]', "12.5");
+        await ui.inputSelector('input[id*="UnitOfMeasureConversionStandard_Factor_input"]', "25");
 
         await ui.lookupSelectWithIcon('input[id*="UnitOfMeasureConversionStandard_ToUnitOfMeasure_Symbol_input"]', "kg");
 

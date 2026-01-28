@@ -1,10 +1,8 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
-const fs = require('fs');
-const path = require('path');
 
-test.describe('stock sales order', () => {
-    test('Create Sales test case', async ({ page }) => {
+test.describe('OV1_10_', () => {
+    test('UK Create stock sales order', async ({ page }) => {
         await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=SalesTableListPage');
 
         let ui: UIElement | null = new UIElement(page);
@@ -17,7 +15,7 @@ test.describe('stock sales order', () => {
 
         await ui.lookupSelectWithIcon('input[id*="InventLocationId_input"]', "LE");
 
-        await ui.inputSelector('input[id*="CustomerRef_input"]', "TEST OV01");
+        await ui.inputSelector('input[id*="CustomerRef_input"]', "Test Sales agreement ");
 
         await ui.inputSelector('input[id*="ReceiptDateRequested_input"]', "11/20/2024");
 
@@ -59,7 +57,9 @@ test.describe('stock sales order', () => {
 
         await ui.clickElement('[id*="Ok_label"]');
 
-        await ui.clickElement('[id*="HeaderView_header"]');
+        await page.waitForTimeout(4000)
+
+        await page.locator('li:has-text("Header")').click();
 
         const getSalesOrder = await ui.getInputValue('input[id*="SalesTable_SalesId_input"]')
 
@@ -75,9 +75,11 @@ test.describe('stock sales order', () => {
 
         await ui.button('Generate picking list');
 
-        await ui.button('OK');
+        await page.waitForTimeout(2000);
 
-        await ui.clickElement('[id*="SysBoxForm_10_Ok"],[id*="Ok"]');
+        await ui.button("Ok")
+
+        await ui.clickElement('[id*="Ok_label"]');
 
         await ui.button('Pick and pack');
 
@@ -89,13 +91,13 @@ test.describe('stock sales order', () => {
 
         await ui.button('Reserve lot');
 
-        await ui.backButton();
-
+        await ui.clickElement('button[aria-lebal="Back"]');
+        
         await ui.clickElement('[id*="WMSPickingRegistration"][id*="UpdatesMenuButton_label"]')
 
         await ui.clickElement('[id*="WMSPickingRegistration"][id*="PickAllButton_label"]')
 
-        await ui.backButton();
+        await ui.clickElement('button[aria-lebal="Back"]');
 
         await ui.button('Pick and pack');
 

@@ -1,0 +1,8 @@
+uk supplier - S1646
+eu supplier - S1647
+uk customer - OV1UKCUST8813
+eu customer - OV1EUCUST3278
+eu product - P0025158
+uk product - P0025160
+product manufactured - 
+sales agreements - 

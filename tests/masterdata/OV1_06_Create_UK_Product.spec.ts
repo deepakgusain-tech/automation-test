@@ -1,13 +1,10 @@
-// spec: specs/customer-list-new-button-test-plan.md
-// seed: tests/seed.spec.ts
-
 import { test, expect } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
 const fs = require('fs');
 const path = require('path');
 
-test.describe('Product List Page', () => {
-    test('Create Product test case', async ({ page }) => {
+test.describe('OV01_06', () => {
+    test('Create UK Product', async ({ page }) => {
 
         await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=EcoResProductListPage');
 
@@ -32,6 +29,8 @@ test.describe('Product List Page', () => {
         // step 6
         const productNumber = await ui.getInputValue('input[id*="Identification_ProductNumber_input"]');
 
+        console.log(productNumber);
+        
         // step 7
         await ui.button('OK');
 
@@ -74,8 +73,10 @@ test.describe('Product List Page', () => {
         // step 18
         await ui.button('Finish');
 
+       await page.waitForTimeout(6000);
+
         // step 19
-        await ui.backButton();
+        await ui.backButton(1);
 
         // step 20
         ui = null;
@@ -124,7 +125,7 @@ test.describe('Product List Page', () => {
 
         await ui.button('Save');
 
-        await ui.backButton();
+        await ui.backButton(1);
 
         await ui.lookupSelectWithIcon('input[id*="PurchaseAdministration_PrimaryVendorId_input"]', "S1604");
 
@@ -158,9 +159,9 @@ test.describe('Product List Page', () => {
 
         await ui.button('Ok');
 
-        await ui.clickElement('[id*="TOCPageConversionInterclass_header"]');
-
         await page.waitForTimeout(4000);
+
+        await ui.clickElement('[id*="TOCPageConversionInterclass_header"]');
 
         await ui.clickElement('[id*="AddButtonInterClass_label"]')
 
@@ -172,7 +173,7 @@ test.describe('Product List Page', () => {
 
         await ui.button('Ok');
 
-        await ui.backButton()
+        await ui.backButton(1)
 
         await page.waitForTimeout(5000);
 
