@@ -85,6 +85,9 @@ export default class UIElement {
         const element = this.page.locator(selector).first();
         await element.click();
 
+        const html = await element.evaluate(el => el.outerHTML);
+        console.log(html);
+
         await this.page.waitForTimeout(1000);
 
         await this.page.getByRole('option', { name: option }).click();
