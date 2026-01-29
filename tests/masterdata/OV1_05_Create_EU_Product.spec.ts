@@ -9,7 +9,7 @@ test.describe('OV1_05_Create_EU_Product', () => {
         await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=EcoResProductListPage');
 
         let ui: UIElement | null = new UIElement(page);
-        const productName = "OV1EUItemNumber" + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+        const productName = "OV1UKItemNumber" + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
 
         // step 1
         await ui.button('New');
