@@ -53,10 +53,10 @@ export default defineConfig({
     trace: 'on-first-retry',
 
     // Take screenshot on failure
-    screenshot: 'only-on-failure',
+    screenshot: 'on',
 
     // Video on failure
-    video: 'retain-on-failure',
+    video: 'on',
 
     viewport: { width: 1920, height: 1080 },
   },
