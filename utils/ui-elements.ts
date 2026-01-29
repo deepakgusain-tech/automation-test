@@ -46,7 +46,7 @@ export default class UIElement {
     */
     async getInputValue(selector: string): Promise<string | void> {
         const input = this.getLocator(selector).first();
-        const value = await input.inputValue();
+        const value = await input.inputValue();       
         // fs.writeFileSync(path.join(__dirname, 'product.txt'), value);
         return value
     }
@@ -71,8 +71,8 @@ export default class UIElement {
     */
     async clickElement(selector: string, step : number = 0) { 
         const element =  this.getLocator(selector).nth(step)
-        const html = await element.evaluate(el => el.outerHTML);
-        console.log(html);
+        // const html = await element.evaluate(el => el.outerHTML);
+        // console.log(html);
         await element.click({force: true});
     }
 
@@ -81,16 +81,16 @@ export default class UIElement {
      * @param selector The selector for the dropdown
      * @param option The option to select (can be value or visible text)
      */
-    async selectBox(selector: string, option: string) {
-        const element = this.page.locator(selector).first();
+    async selectBox(selector: string, option: string, step: number = 0) {
+        const element = this.page.locator(selector).nth(step);
         await element.click();
 
-        const html = await element.evaluate(el => el.outerHTML);
-        console.log(html);
+        // const html = await element.evaluate(el => el.outerHTML);
+        // console.log(html);
 
         await this.page.waitForTimeout(1000);
 
-        await this.page.getByRole('option', { name: option }).click();
+        await this.page.getByRole('option', { name: option, exact: true }).first().click();
     }
 
     async lookupSelect(fieldSelector: string, value: string) {
