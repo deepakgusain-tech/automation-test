@@ -1,4 +1,4 @@
-import { test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import UIElement from "../../utils/ui-elements";
 
 test.describe("OV01_15", () => {
@@ -61,33 +61,28 @@ test.describe("OV01_15", () => {
 
         await ui.filterOption('div[id*="PriceDiscAdmTable_JournalNum"]', 'input[id*="__FilterField_PriceDiscAdmTable_JournalNum_JournalNum_Input"]', getPriceDiscountID);
 
-        // refresh button not working
-        // await ui.clickElement("button[name*='SystemDefinedRefreshButton']", 2);
-
-        // await ui.button("Refresh")
-
-
-        await page.waitForTimeout(4000);
+        await ui.clickElement('button[data-dyn-controlname="SystemDefinedRefreshButton"][command="Refresh"]', 1);
 
         await ui.selectBox('input[id*="PriceDiscAdmTable"][id*="AllOpenPosted_input"]', 'All', 1);
 
-        await page.waitForTimeout(10000);
+        await page.waitForTimeout(4000);
 
-        await ui.clickElement('button[id*="SystemDefinedNewButton"]', 1)
+        const newBtn = page.locator('button[data-dyn-controlname="SystemDefinedNewButton"][command="New"]:not([disabled])').nth(1);
 
-        await ui.lookupSelectWithIcon('input[id*="PriceDiscAdmTable_JournalName"]', "PriceList");
+        await expect(newBtn).toBeEnabled({ timeout: 15000 });
+        await newBtn.click();
 
-        await ui.inputSelector('input[id*="PriceDiscAdmTable_Name"]', "SB April 2024");
+        await ui.lookupSelectWithIcon('input[id*="PriceDiscAdmTable_JournalName"]', "PriceList", 1);
+
+        await ui.inputSelector('input[id*="PriceDiscAdmTable_Name"]', "SB April 2024", 1);
 
         await ui.button("Save");
 
         await page.waitForTimeout(4000)
 
-        getPriceDiscountID = await ui.getInputValue('input[id*="PriceDiscAdmTable_JournalNum"]')
+        getPriceDiscountID = await ui.getInputValue('input[id*="PriceDiscAdmTable_JournalNum"]', 1)
 
         if (!getPriceDiscountID) return;
-
-        console.log(getPriceDiscountID);
 
         await ui.button("Lines");
 
@@ -109,9 +104,9 @@ test.describe("OV01_15", () => {
 
         await page.waitForTimeout(2000);
 
-        await ui.selectBox('input[id*="PriceDiscAdmTable"][id*="AllOpenPosted_input"]', 'Posted');
+        await ui.selectBox('input[id*="PriceDiscAdmTable"][id*="AllOpenPosted_input"]', 'Posted', 1);
 
-        await ui.filterOption('div[id*="PriceDiscAdmTable_JournalNum"]', 'input[id*="__FilterField_PriceDiscAdmTable_JournalNum_JournalNum_Input"]', getPriceDiscountID);
+        await ui.filterOption('div[id*="PriceDiscAdmTable_JournalNum_"][id*="_header"]', 'input[id*="__FilterField_PriceDiscAdmTable_JournalNum_JournalNum_Input_"]', getPriceDiscountID, 1);
 
         await page.waitForTimeout(30000);
     });

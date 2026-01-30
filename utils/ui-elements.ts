@@ -23,8 +23,8 @@ export default class UIElement {
     /**
      * Fill input (handles readonly fields as well)
      */
-    async inputSelector(selector: string, value: string) {
-        const element = this.page.locator(selector).first();
+    async inputSelector(selector: string, value: string, step: number = 0) {
+        const element = this.page.locator(selector).nth(step);
         await expect(element).toBeVisible();
 
         const isReadonly = await element.getAttribute('readonly');
@@ -44,8 +44,8 @@ export default class UIElement {
     /**
     * get input value
     */
-    async getInputValue(selector: string): Promise<string | void> {
-        const input = this.getLocator(selector).first();
+    async getInputValue(selector: string, step: number = 0): Promise<string | void> {
+        const input = this.getLocator(selector).nth(step);
         const value = await input.inputValue();       
         // fs.writeFileSync(path.join(__dirname, 'product.txt'), value);
         return value
@@ -114,9 +114,9 @@ export default class UIElement {
        * @param fieldSelector - The input field selector
        * @param value - The item to select from the dropdown
        */
-    async lookupSelectWithIcon(fieldSelector: string, value: string) {
+    async lookupSelectWithIcon(fieldSelector: string, value: string, step: number = 0) {
 
-        const field = this.getLocator(fieldSelector).nth(0);
+        const field = this.getLocator(fieldSelector).nth(step);
 
         await this.page.waitForTimeout(1000);
 
@@ -164,13 +164,13 @@ export default class UIElement {
        * @param inputSelector - The input field selector
        * @param value - The item to select from the dropdown
        */
-    async filterOption(mainSelector: string, inputSelector: string, value: string) {
-        await this.page.locator(mainSelector).first().click();
+    async filterOption(mainSelector: string, inputSelector: string, value: string, step: number = 0) {
+        await this.page.locator(mainSelector).nth(step).click();
 
         await this.page.waitForLoadState('networkidle');
 
         if (value) {
-            await this.page.locator(inputSelector).first().fill(value);
+            await this.page.locator(inputSelector).nth(step).fill(value);
 
         } else {
             await this.page.getByRole('button', { name: ' Sort Z to A' }).click();
