@@ -94,7 +94,7 @@ test.describe("OV1_09_UK – Create Purchase Order", () => {
     // input becomes readonly
     await ui.inputSelector('input[aria-label="Batch number"]', batchNumber)
 
-    await ui.inputSelector('input[aria-label="Location"]', "Location")
+    await ui.inputSelector('input[aria-label="Location"]', location)
 
     await ui.inputSelector('input[aria-label="License plate"]', licensePlate)
 
@@ -113,8 +113,6 @@ test.describe("OV1_09_UK – Create Purchase Order", () => {
     await ui.inputSelector('input[aria-label="Product receipt"]', productRecieptNumber)
 
     await ui.button("OK")
-
-    // await page.waitForTimeout(20000);
 
   });
 });

@@ -91,13 +91,13 @@ test.describe('OV1_10_', () => {
 
         await ui.button('Reserve lot');
 
-        await ui.clickElement('button[aria-lebal="Back"]');
-        
+        await ui.button('Back', 1);
+
         await ui.clickElement('[id*="WMSPickingRegistration"][id*="UpdatesMenuButton_label"]')
 
         await ui.clickElement('[id*="WMSPickingRegistration"][id*="PickAllButton_label"]')
 
-        await ui.clickElement('button[aria-lebal="Back"]');
+        await ui.button('Back', 1);
 
         await ui.button('Pick and pack');
 
