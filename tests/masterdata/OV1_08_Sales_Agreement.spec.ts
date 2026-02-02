@@ -14,6 +14,10 @@ test.describe('OV01_08', () => {
        
         await ui.button('New');
 
+        await page.waitForTimeout(1000);
+
+        await ui.clickElement('button[aria-label="Customer"][aria-expanded="false"]');
+
         await ui.lookupSelectWithIcon('[id*="SalesAgreementHeader_CustAccount_input"]', customer)
 
         await page.waitForTimeout(1000);

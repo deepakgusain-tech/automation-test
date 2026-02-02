@@ -6,13 +6,13 @@ const path = require('path');
 test.describe('OV01_06', () => {
     test('Create UK Product', async ({ page }) => {
 
-        await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=EcoResProductListPage');
+        await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=EcoResProductListPage', { waitUntil: 'networkidle' });
 
-        let ui : UIElement | null = new UIElement(page);
+        let ui: UIElement | null = new UIElement(page);
         const productName = "OV1UKItemNumber" + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
 
         console.log(productName);
-        
+
 
         // step 1
         await ui.button('New');
@@ -33,7 +33,7 @@ test.describe('OV01_06', () => {
         const productNumber = await ui.getInputValue('input[id*="Identification_ProductNumber_input"]');
 
         console.log(productNumber);
-        
+
         // step 7
         await ui.button('OK');
 
@@ -76,7 +76,7 @@ test.describe('OV01_06', () => {
         // step 18
         await ui.button('Finish');
 
-       await page.waitForTimeout(6000);
+        await page.waitForTimeout(6000);
 
         // step 19
         await ui.backButton(1);
@@ -84,7 +84,7 @@ test.describe('OV01_06', () => {
         // step 20
         ui = null;
 
-        await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=EcoResProductDetailsExtendedGrid');
+        await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=EcoResProductDetailsExtendedGrid', { waitUntil: 'networkidle' });
 
         ui = new UIElement(page);
 
@@ -134,7 +134,15 @@ test.describe('OV01_06', () => {
 
         await ui.selectBox('input[id*="InventTable_PdsVendorCheckItem_input"]', 'Not allowed');
 
-        await ui.clickElement('[id*="DropShipment_toggle"]')
+        await page.waitForTimeout(2000);
+
+        const toggle = page.locator('[id$="_DropShipment_toggle"]');
+
+        if (await toggle.getAttribute('aria-checked') === 'false') {
+            await toggle.click({ force: true });
+        }
+
+        await page.waitForTimeout(4000);
 
         await ui.lookupSelectWithIcon('input[id*="DefaultDropShipmentWarehouse_input"]', "TWD");
 

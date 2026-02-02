@@ -71,8 +71,8 @@ export default class UIElement {
     */
     async clickElement(selector: string, step : number = 0) { 
         const element =  this.getLocator(selector).nth(step)
-        // const html = await element.evaluate(el => el.outerHTML);
-        // console.log(html);
+        const html = await element.evaluate(el => el.outerHTML);
+        console.log(html);
         await element.click({force: true});
     }
 

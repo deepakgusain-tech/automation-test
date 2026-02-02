@@ -46,7 +46,7 @@ test.describe("OV01_15", () => {
         await ui.lookupSelectWithIcon('input[aria-label="Account selection"]', SUPPLIER_ACCOUNT);
         await ui.inputSelector('input[aria-label="Product code type"]', "Table");
         await ui.inputSelector('input[aria-label="Item relation"]', ItemNumber);
-
+ 
         await ui.inputSelector('input[id*="Amount_"][aria-label="Amount in currency"]', "5",);
         await ui.inputSelector('input[aria-label="Currency"]', "GBP");
 
@@ -84,6 +84,8 @@ test.describe("OV01_15", () => {
 
         if (!getPriceDiscountID) return;
 
+        console.log(getPriceDiscountID);
+
         await ui.button("Lines");
 
         await ui.inputSelector('input[aria-label="Party code type"]', "Table");
@@ -106,7 +108,7 @@ test.describe("OV01_15", () => {
 
         await ui.selectBox('input[id*="PriceDiscAdmTable"][id*="AllOpenPosted_input"]', 'Posted', 1);
 
-        await ui.filterOption('div[id*="PriceDiscAdmTable_JournalNum_"][id*="_header"]', 'input[id*="__FilterField_PriceDiscAdmTable_JournalNum_JournalNum_Input_"]', getPriceDiscountID, 1);
+        await ui.filterOption('div[id*="PriceDiscAdmTable_JournalNum_"][id*="_header"]', 'input[id*="__FilterField_PriceDiscAdmTable_JournalNum_JournalNum_Input_input"]', getPriceDiscountID, 1);
 
         await page.waitForTimeout(30000);
     });

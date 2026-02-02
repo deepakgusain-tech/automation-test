@@ -5,10 +5,9 @@ test.describe('OV1_01', () => {
   test('Create UK Supplier', async ({ page }) => {
 
     // Navigate to the vendor list page and click the 'New' button
-    await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=VendTableListPage');
+    await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=VendTableListPage',  { waitUntil: 'networkidle' });
 
     const ui = new UIElement(page)
-    await page.waitForTimeout(3000);
 
     await ui.button("New");
 
@@ -33,7 +32,9 @@ test.describe('OV1_01', () => {
 
     await ui.lookupSelectWithIcon('select[aria-labelledby*="SalesTax_TaxGroup"], input[aria-labelledby*="SalesTax_TaxGroup"]', "UK_VUK")
 
-    await ui.clickElement('[id*="NewAddress"]');
+    await ui.clickElement('[id*="LogisticsPostalAddressGridFormPart_"][id*="NewAddress"]');
+
+    await page.waitForTimeout(4000);
 
     await ui.inputSelector('input[aria-labelledby*="Description_label"]', vendorName);
 
@@ -51,11 +52,11 @@ test.describe('OV1_01', () => {
 
     await ui.button('OK');
 
-    await ui.clickElement('[id*="NewContactInfo"]')
+    await ui.clickElement('[id*="vendtablelistpage_"][id*="NewContactInfo_label"]')
 
+    await page.waitForTimeout(4000);
 
     await ui.inputSelector('input[id*="ContactInfo_Description"]', 'Dr.Pepper');
-
 
     await ui.lookupSelectWithIcon('input[id*="ContactInfo_Type"]', 'Email Address');
 
@@ -92,8 +93,5 @@ test.describe('OV1_01', () => {
     await ui.lookupSelectWithIcon('input[id*="Delivery_DlvTerm_input"]', "DAP");
 
     await ui.button('Save');
-
-    await page.waitForTimeout(30000);
-
   });
 });
