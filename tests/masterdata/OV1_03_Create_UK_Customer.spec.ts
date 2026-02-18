@@ -65,14 +65,22 @@ test.describe('OV01_03', () => {
 
         await ui.inputSelector('input[aria-labelledby*="ZipCode_label"]', "WR15 8JF");
 
-        await ui.inputSelector('input[aria-labelledby*="PostBox_label"]', "HR6 0SP");
+        // await ui.inputSelector('input[aria-labelledby*="PostBox_label"]', "HR6 0SP");
 
         await ui.inputSelector('textarea[aria-labelledby*="Street_label"]', "Orchard Lane, Valleyshire");
 
         await ui.button("OK");
 
-        // contact info section
-        await ui.clickElement('[id*="NewContactInfo_label"]');
+
+        const contactTab = page.getByRole('button', { name: 'Contact information', exact: true });
+
+        if (await contactTab.getAttribute('aria-expanded') === 'false') {
+        await contactTab.click();
+        }
+
+        await page.waitForTimeout(2000);
+
+        await ui.clickElement("button[name='NewContactInfo']")
 
         await ui.inputSelector('input[id*="ContactInfo_Description"]', "Willy Wonka");
 

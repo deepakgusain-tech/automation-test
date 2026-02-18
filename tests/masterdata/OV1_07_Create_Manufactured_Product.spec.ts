@@ -8,8 +8,6 @@ test.describe('OV1_07', () => {
 
         let ui : UIElement | null = new UIElement(page);
         const productName = "V1MANUProduct" + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-        console.log(productName);
-        
 
         // step 1
         await ui.button('New');
@@ -19,6 +17,7 @@ test.describe('OV1_07', () => {
 
         // step 3
         await ui.inputSelector('input[id*="Identification_Name_input"]', productName);
+        console.log(productName);
 
         // step 4
         await ui.lookupSelectWithIcon('input[id*="CustomProductLanguage_input"]', 'en-GB');
@@ -91,7 +90,7 @@ test.describe('OV1_07', () => {
 
         await ui.button('Apply template');
 
-        await ui.filterOption('[id*="TmpSysTableTemplate_Description"]', 'input[id*="TmpSysTableTemplate_Description_Description_Input"]', "Finished Goods (HG)", 1);
+        await ui.filterOption('[id*="TmpSysTableTemplate_Description"]', 'input[id*="TmpSysTableTemplate_Description_Description_Input"]', "(SI) Finished Goods EA");
 
         await page.waitForLoadState('networkidle');
 
@@ -117,13 +116,13 @@ test.describe('OV1_07', () => {
 
         await page.waitForLoadState('networkidle');
 
-        await ui.lookupSelectWithIcon('input[id*="PdsApprovedVendorList_PdsApprovedVendor"]', "S0016");
+        await ui.lookupSelectWithIcon('input[id*="PdsApprovedVendorList_PdsApprovedVendor"]', "S1482");
 
         await ui.button('Save');
 
         await ui.backButton(1);
 
-        await ui.lookupSelectWithIcon('input[id*="PurchaseAdministration_PrimaryVendorId_input"]', "S0016");
+        await ui.lookupSelectWithIcon('input[id*="PurchaseAdministration_PrimaryVendorId_input"]', "S1482");
 
         await ui.selectBox('input[id*="InventTable_PdsVendorCheckItem_input"]', 'Not allowed');
 
@@ -150,6 +149,9 @@ test.describe('OV1_07', () => {
         await page.waitForLoadState('networkidle');
 
         await ui.button('Ok');
+
+        await page.waitForTimeout(2000);
+
 
         await ui.clickElement('[id*="TOCPageConversionInterclass_header"]');
 

@@ -88,6 +88,8 @@ test.describe('OV1_05_Create_EU_Product', () => {
         const itemNumber = productName;
 
         await ui.filterOption('[id*="InventTable_ItemIdGrid"]', 'input[id*="ItemIdGrid_ItemId_Input"]', itemNumber);
+        console.log(itemNumber);
+        
 
         await ui.button('Product');
 
@@ -98,6 +100,8 @@ test.describe('OV1_05_Create_EU_Product', () => {
         await ui.filterOption('[id*="TmpSysTableTemplate_Description"]', 'input[id*="TmpSysTableTemplate_Description_Description_Input"]', "Traded Items Conf - KGs");
 
         await page.waitForLoadState('networkidle');
+
+        // await ui.button('Apply template');
 
         await ui.button('Ok');
 
@@ -121,17 +125,25 @@ test.describe('OV1_05_Create_EU_Product', () => {
 
         await page.waitForLoadState('networkidle');
 
-        await ui.lookupSelectWithIcon('input[id*="PdsApprovedVendorList_PdsApprovedVendor"]', "S1604");
+        await ui.lookupSelectWithIcon('input[id*="PdsApprovedVendorList_PdsApprovedVendor"]', "S1482");
 
         await ui.button('Save');
 
         await ui.backButton(1);
 
-        await ui.lookupSelectWithIcon('input[id*="PurchaseAdministration_PrimaryVendorId_input"]', "S1604");
+        await ui.lookupSelectWithIcon('input[id*="PurchaseAdministration_PrimaryVendorId_input"]', "S1482");
 
         await ui.selectBox('input[id*="InventTable_PdsVendorCheckItem_input"]', 'Not allowed');
 
-        await ui.clickElement('[id*="DropShipment_toggle"]')
+        await page.waitForTimeout(2000);
+
+        const toggle = page.locator('[id$="_DropShipment_toggle"]');
+
+        if (await toggle.getAttribute('aria-checked') === 'false') {
+            await toggle.click({ force: true });
+        }
+
+        await page.waitForTimeout(4000);
 
         await ui.lookupSelectWithIcon('input[id*="DefaultDropShipmentWarehouse_input"]', "TWD");
 

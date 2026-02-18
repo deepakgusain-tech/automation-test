@@ -46,7 +46,7 @@ export default class UIElement {
     */
     async getInputValue(selector: string, step: number = 0): Promise<string | void> {
         const input = this.getLocator(selector).nth(step);
-        const value = await input.inputValue();       
+        const value = await input.inputValue();
         // fs.writeFileSync(path.join(__dirname, 'product.txt'), value);
         return value
     }
@@ -62,19 +62,25 @@ export default class UIElement {
      * Click an element by button selector
      */
     async button(buttonName: string, buttonNumber: number = 0) {
-        const element = this.page.getByRole('button', { name: new RegExp(buttonName, 'i'), exact: true }).nth(buttonNumber);
+        const element = this.page.getByRole('button', { name: new RegExp(buttonName, 'i') }).nth(buttonNumber);
         await element.click();
     }
 
     /**
     * Click an element by button selector
     */
-    async clickElement(selector: string, step : number = 0) { 
-        const element =  this.getLocator(selector).nth(step)
-        await element.waitFor({ state: 'visible' });
-        const html = await element.evaluate(el => el.outerHTML);
-        console.log(html);
-        await element.click({force: true});
+
+    async clickElement(selector: string) {
+        const element = this.page.locator(selector).first();
+
+        await element.scrollIntoViewIfNeeded();
+
+        const blocker = this.page.locator('#ShellBlockingDiv');
+        if (await blocker.isVisible().catch(() => false)) {
+            await blocker.waitFor({ state: 'hidden', timeout: 30000 });
+        }
+
+        await element.click({ force: true });
     }
 
     /**
@@ -84,12 +90,10 @@ export default class UIElement {
      */
     async selectBox(selector: string, option: string, step: number = 0) {
         const element = this.page.locator(selector).nth(step);
-       
+        await element.click();
 
-        const html = await element.evaluate(el => el.outerHTML);
-        console.log(html);
-
-         await element.click();
+        // const html = await element.evaluate(el => el.outerHTML);
+        // console.log(html);
 
         await this.page.waitForTimeout(1000);
 
@@ -141,7 +145,7 @@ export default class UIElement {
         await this.page.keyboard.type(value, { delay: 1000 });
 
         const inputField = this.page.locator(`input[value="${value}"]:visible`).first();
-        await inputField.click();
+        await inputField.click({ force: true });
     }
 
     /**
@@ -156,11 +160,9 @@ export default class UIElement {
         const icon = field.locator('..').locator('[class*="lookup"]').first();
         await icon.click({ button: 'right' });
 
-        await this.page.waitForTimeout(1000);
-
-        const viewDetails =  this.page.getByRole('menuitem', { name: new RegExp(value, 'i'), exact: true });
-        await viewDetails.waitFor({ state: 'visible', timeout: 1000 });
-        await viewDetails.click({force: true});
+        const viewDetails = this.page.getByRole('menuitem', { name: value });
+        await expect(viewDetails).toBeVisible();
+        await viewDetails.click();
     }
 
     /**
@@ -176,20 +178,31 @@ export default class UIElement {
 
         if (value) {
             await this.page.locator(inputSelector).nth(step).fill(value);
-
         } else {
             await this.page.getByRole('button', { name: ' Sort Z to A' }).click();
         }
 
         await this.page.waitForLoadState('networkidle');
 
-        await this.page.getByRole('button', { name: 'Apply' }).nth(step).click();
+        const applyBtn = this.page.getByRole('button', { name: /^Apply$/ }).nth(step);
+
+        await this.page.waitForFunction(() => {
+            const overlay = document.querySelector('.modalBackground');
+            return !overlay ||
+                overlay.getAttribute('aria-hidden') === 'true' ||
+                (overlay as HTMLElement).style.display === 'none';
+        });
+
+        await applyBtn.waitFor({ state: 'visible' });
+        await applyBtn.click();
 
         await this.page.waitForLoadState('networkidle');
 
         const inputField = this.page.locator(`input[value="${value}"]`).first();
         await inputField.click();
     }
+
+
 
     async close() {
         this.page.close();

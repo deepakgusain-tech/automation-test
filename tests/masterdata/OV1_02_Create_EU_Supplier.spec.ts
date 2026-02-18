@@ -5,7 +5,7 @@ test.describe('OV1_02', () => {
   test('Create EU Supplier', async ({ page }) => {
 
     // Navigate to the vendor list page and click the 'New' button
-    await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=VendTableListPage',  { waitUntil: 'networkidle' });
+    await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=VendTableListPage');
 
     const ui = new UIElement(page)
     await page.waitForTimeout(3000);
@@ -25,7 +25,7 @@ test.describe('OV1_02', () => {
 
     const vendorName = "OV1EUSUP" + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
     console.log(vendorName);
-
+    
     await ui.inputSelector('input[aria-labelledby*="Name"]', vendorName)
 
     await ui.inputSelector('input[aria-labelledby*="NameAlias"]', vendorName)
@@ -34,9 +34,17 @@ test.describe('OV1_02', () => {
 
     await ui.lookupSelectWithIcon('select[aria-labelledby*="SalesTax_TaxGroup"], input[aria-labelledby*="SalesTax_TaxGroup"]', "UK_VEU")
 
-    await ui.clickElement('[id*="LogisticsPostalAddressGridFormPart_"][id*="NewAddress"]');
 
-    await page.waitForTimeout(4000);
+    const addressTab = page.getByRole('button', { name: 'Addresses', exact: true });
+
+    if (await addressTab.getAttribute('aria-expanded') === 'false') {
+      await addressTab.click();
+    }
+
+    
+    await page.waitForTimeout(2000);
+
+    await ui.clickElement("button[name='NewAddress']")
 
     await ui.inputSelector('input[aria-labelledby*="Description_label"]', vendorName);
 
@@ -44,7 +52,7 @@ test.describe('OV1_02', () => {
 
     await ui.lookupSelectWithIcon('input[aria-labelledby*="CountryRegionId_input"]', "DEU");
 
-    await ui.button('Yes');
+    // await ui.button('Yes');
 
     await ui.inputSelector('input[aria-labelledby*="ZipCode_label"]', "CH-5621");
 
@@ -54,9 +62,15 @@ test.describe('OV1_02', () => {
 
     await ui.button('OK');
 
-    await ui.clickElement('[id*="vendtablelistpage_"][id*="NewContactInfo_label"]')
+    const contactTab = page.getByRole('button', { name: 'Contact information', exact: true });
 
-    await page.waitForTimeout(4000);
+    if (await contactTab.getAttribute('aria-expanded') === 'false') {
+      await contactTab.click();
+    }
+
+    await page.waitForTimeout(2000);
+    await ui.clickElement("button[name='NewContactInfo']");
+
 
     await ui.inputSelector('input[id*="ContactInfo_Description"]', 'Harry Bo');
 
@@ -98,5 +112,8 @@ test.describe('OV1_02', () => {
     await ui.lookupSelectWithIcon('input[id*="Delivery_DlvTerm_input"]', "FCA");
 
     await ui.button('Save');
+
+    await page.waitForTimeout(30000);
+
   });
 });

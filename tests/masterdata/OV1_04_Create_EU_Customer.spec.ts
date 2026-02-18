@@ -61,7 +61,7 @@ test.describe("OV1_04", () => {
 
     await page.waitForTimeout(2000)
 
-    await ui.inputSelector('input[aria-labelledby*="Description_label"]', 'EU Customer R132 Address');
+    await ui.inputSelector('input[aria-labelledby*="Details_Description_label"]', 'EU Customer R132 Address');
 
     await ui.inputSelector('input[aria-labelledby*="ZipCode_label"]', "55130");
 
@@ -71,6 +71,7 @@ test.describe("OV1_04", () => {
 
     // contact info section
     await ui.clickElement('[id*="NewContactInfo_label"]');
+    await page.waitForTimeout(4000);
 
     await ui.inputSelector('input[id*="ContactInfo_Description"]', "Ronald McDonald");
 
