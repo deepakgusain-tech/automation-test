@@ -8,6 +8,8 @@ test.describe('OV1_07', () => {
 
         let ui : UIElement | null = new UIElement(page);
         const productName = "V1MANUProduct" + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+        console.log(productName);
+        
 
         // step 1
         await ui.button('New');
@@ -89,7 +91,7 @@ test.describe('OV1_07', () => {
 
         await ui.button('Apply template');
 
-        await ui.filterOption('[id*="TmpSysTableTemplate_Description"]', 'input[id*="TmpSysTableTemplate_Description_Description_Input"]', "Finished Goods EA (SI)");
+        await ui.filterOption('[id*="TmpSysTableTemplate_Description"]', 'input[id*="TmpSysTableTemplate_Description_Description_Input"]', "Finished Goods (HG)", 1);
 
         await page.waitForLoadState('networkidle');
 

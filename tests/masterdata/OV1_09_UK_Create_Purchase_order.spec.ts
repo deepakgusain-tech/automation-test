@@ -5,8 +5,8 @@ import UIElement from "../../utils/ui-elements";
 test.describe("OV1_09_UK – Create Purchase Order", () => {
   test("Create, Register and Receive Purchase Order", async ({ page }) => {
 
-    const supplierAccount = "S1604";
-    const itemNumber = "OV1UKItemNumber2673";
+    const supplierAccount = "S1691";
+    const itemNumber = "OV1UKItemNumber1003";
     const site = "LE";
     const warehouse = "LE";
     const quantity = "1000";
@@ -90,7 +90,7 @@ test.describe("OV1_09_UK – Create Purchase Order", () => {
     await ui.button("Back", 1);
 
     await ui.button("Back", 1);
-    
+
     // input becomes readonly
     await ui.inputSelector('input[aria-label="Batch number"]', batchNumber)
 
@@ -104,6 +104,8 @@ test.describe("OV1_09_UK – Create Purchase Order", () => {
 
     await ui.button("Back", 1);
 
+    // click yes manuall
+
     await ui.button('Receive');
 
     await ui.button('Product receipt');
@@ -113,6 +115,8 @@ test.describe("OV1_09_UK – Create Purchase Order", () => {
     await ui.inputSelector('input[aria-label="Product receipt"]', productRecieptNumber)
 
     await ui.button("OK")
+
+    await page.waitForTimeout(30000);
 
   });
 });

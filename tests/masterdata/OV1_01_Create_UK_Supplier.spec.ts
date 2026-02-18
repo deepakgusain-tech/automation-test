@@ -32,9 +32,15 @@ test.describe('OV1_01', () => {
 
     await ui.lookupSelectWithIcon('select[aria-labelledby*="SalesTax_TaxGroup"], input[aria-labelledby*="SalesTax_TaxGroup"]', "UK_VUK")
 
-    await ui.clickElement('[id*="LogisticsPostalAddressGridFormPart_"][id*="NewAddress"]');
+    const addressTab = page.getByRole('button', { name: 'Addresses', exact: true });
 
-    await page.waitForTimeout(4000);
+    if (await addressTab.getAttribute('aria-expanded') === 'false') {
+      await addressTab.click();
+    }
+
+    await page.waitForTimeout(2000);
+
+    await ui.clickElement("button[name='NewAddress']")
 
     await ui.inputSelector('input[aria-labelledby*="Description_label"]', vendorName);
 
@@ -42,7 +48,7 @@ test.describe('OV1_01', () => {
 
     await ui.lookupSelectWithIcon('input[aria-labelledby*="CountryRegionId_input"]', "GBR");
 
-    await ui.button('Yes');
+    // await ui.button('Yes');
 
     await ui.inputSelector('input[aria-labelledby*="ZipCode_label"]', "HR6 0SP");
 
@@ -52,9 +58,11 @@ test.describe('OV1_01', () => {
 
     await ui.button('OK');
 
-    await ui.clickElement('[id*="vendtablelistpage_"][id*="NewContactInfo_label"]')
+    await page.waitForTimeout(2000);
 
-    await page.waitForTimeout(4000);
+    await ui.clickElement("button[name='NewContactInfo']")
+
+    await page.waitForTimeout(2000);
 
     await ui.inputSelector('input[id*="ContactInfo_Description"]', 'Dr.Pepper');
 
@@ -89,7 +97,7 @@ test.describe('OV1_01', () => {
     await ui.button('Save');
 
     await ui.lookupSelectWithIcon('input[id*="Payment_PaymTermId_input"]', 'Net60');
-   
+
     await ui.lookupSelectWithIcon('input[id*="Delivery_DlvTerm_input"]', "DAP");
 
     await ui.button('Save');

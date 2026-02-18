@@ -98,7 +98,7 @@ test.describe('OV01_06', () => {
 
         await ui.button('Apply template');
 
-        await ui.filterOption('[id*="TmpSysTableTemplate_Description"]', 'input[id*="TmpSysTableTemplate_Description_Description_Input"]', "Traded Items Conf - KGs");
+        await ui.filterOption('[id*="TmpSysTableTemplate_Description"]', 'input[id*="TmpSysTableTemplate_Description_Description_Input"]', "Traded Items Conf - KGs" , 1);
 
         await page.waitForLoadState('networkidle');
 
@@ -124,13 +124,13 @@ test.describe('OV01_06', () => {
 
         await page.waitForLoadState('networkidle');
 
-        await ui.lookupSelectWithIcon('input[id*="PdsApprovedVendorList_PdsApprovedVendor"]', "S1604");
+        await ui.lookupSelectWithIcon('input[id*="PdsApprovedVendorList_PdsApprovedVendor"]', "S1691");
 
         await ui.button('Save');
 
         await ui.backButton(1);
 
-        await ui.lookupSelectWithIcon('input[id*="PurchaseAdministration_PrimaryVendorId_input"]', "S1604");
+        await ui.lookupSelectWithIcon('input[id*="PurchaseAdministration_PrimaryVendorId_input"]', "S1691");
 
         await ui.selectBox('input[id*="InventTable_PdsVendorCheckItem_input"]', 'Not allowed');
 

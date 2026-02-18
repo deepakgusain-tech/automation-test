@@ -62,7 +62,7 @@ export default class UIElement {
      * Click an element by button selector
      */
     async button(buttonName: string, buttonNumber: number = 0) {
-        const element = this.page.getByRole('button', { name: new RegExp(buttonName, 'i') }).nth(buttonNumber);
+        const element = this.page.getByRole('button', { name: new RegExp(buttonName, 'i'), exact: true }).nth(buttonNumber);
         await element.click();
     }
 
@@ -71,6 +71,7 @@ export default class UIElement {
     */
     async clickElement(selector: string, step : number = 0) { 
         const element =  this.getLocator(selector).nth(step)
+        await element.waitFor({ state: 'visible' });
         const html = await element.evaluate(el => el.outerHTML);
         console.log(html);
         await element.click({force: true});
@@ -83,10 +84,12 @@ export default class UIElement {
      */
     async selectBox(selector: string, option: string, step: number = 0) {
         const element = this.page.locator(selector).nth(step);
-        await element.click();
+       
 
-        // const html = await element.evaluate(el => el.outerHTML);
-        // console.log(html);
+        const html = await element.evaluate(el => el.outerHTML);
+        console.log(html);
+
+         await element.click();
 
         await this.page.waitForTimeout(1000);
 
@@ -138,7 +141,7 @@ export default class UIElement {
         await this.page.keyboard.type(value, { delay: 1000 });
 
         const inputField = this.page.locator(`input[value="${value}"]:visible`).first();
-        await inputField.click({ force: true });
+        await inputField.click();
     }
 
     /**
@@ -153,9 +156,11 @@ export default class UIElement {
         const icon = field.locator('..').locator('[class*="lookup"]').first();
         await icon.click({ button: 'right' });
 
-        const viewDetails = this.page.getByRole('menuitem', { name: value });
-        await expect(viewDetails).toBeVisible();
-        await viewDetails.click();
+        await this.page.waitForTimeout(1000);
+
+        const viewDetails =  this.page.getByRole('menuitem', { name: new RegExp(value, 'i'), exact: true });
+        await viewDetails.waitFor({ state: 'visible', timeout: 1000 });
+        await viewDetails.click({force: true});
     }
 
     /**
@@ -178,7 +183,7 @@ export default class UIElement {
 
         await this.page.waitForLoadState('networkidle');
 
-        await this.page.getByRole('button', { name: 'Apply' }).click();
+        await this.page.getByRole('button', { name: 'Apply' }).nth(step).click();
 
         await this.page.waitForLoadState('networkidle');
 

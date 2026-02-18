@@ -16,9 +16,9 @@ dotenv.config();
 export default defineConfig({
   testDir: './tests',
 
-  timeout: 8 * 60 * 1000,
+  timeout: 10 * 60 * 1000,
   expect: {
-    timeout: 8 * 60 * 1000,
+    timeout: 10 * 60 * 1000,
   },
 
   // Global setup runs once before all tests
@@ -43,7 +43,11 @@ export default defineConfig({
   use: {
     // Base URL for relative URLs
     baseURL: 'https://orkla-uat2.sandbox.operations.dynamics.com',
-    headless: false,
+    headless: true,
+
+    launchOptions: {
+      args: ['--renderer-process-limit=1']
+    },
 
     // Use stored session for all tests
     // This avoids repeated login in most tests
@@ -57,8 +61,6 @@ export default defineConfig({
 
     // Video on failure
     video: 'on',
-
-    viewport: { width: 1920, height: 1080 },
   },
 
   // Configure projects for major browsers
