@@ -77,7 +77,7 @@ test.describe("OV1_09_UK – Create Purchase Order", () => {
 
     await ui.viewLookup('input[id*="InventoryDimensions_inventBatchId"]', "View details");
 
-    await ui.clickElement('span[id*="SystemDefinedNewButton_label"]', 1);
+    await ui.clickElement('span[id*="SystemDefinedNewButton_label"]');
 
     let batchNumber: any = "BN_" + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
 
