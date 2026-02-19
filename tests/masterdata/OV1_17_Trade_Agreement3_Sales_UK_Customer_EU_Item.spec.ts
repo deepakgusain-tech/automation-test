@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
 
-test.describe('OV1_01', () => {
-    test('Create UK Supplier', async ({ page }) => {
+test.describe('OV1_17', () => {
+    test('Trade Agreement3 Sales UK Customer EU Item', async ({ page }) => {
 
         const productName = "OV1EUItemNumber5765";
         const customer = "OV1UKCUST0323";

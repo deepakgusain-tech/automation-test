@@ -70,8 +70,8 @@ export default class UIElement {
     * Click an element by button selector
     */
 
-    async clickElement(selector: string) {
-        const element = this.page.locator(selector).first();
+    async clickElement(selector: string, step: number = 0) {
+        const element = this.page.locator(selector).nth(step);
 
         await element.scrollIntoViewIfNeeded();
 
@@ -184,7 +184,7 @@ export default class UIElement {
 
         await this.page.waitForLoadState('networkidle');
 
-        const applyBtn = this.page.getByRole('button', { name: /^Apply$/ }).nth(step);
+        const applyBtn = this.page.getByRole('button', { name: /^Apply$/ }).first();
 
         await this.page.waitForFunction(() => {
             const overlay = document.querySelector('.modalBackground');

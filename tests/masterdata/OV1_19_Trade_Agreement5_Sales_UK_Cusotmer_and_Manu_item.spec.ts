@@ -1,12 +1,11 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
-import moment from 'moment';
 
-test.describe('OV1_18', () => {
-    test('Trade Agreement4 Sales EU Customer and Manu Item', async ({ page }) => {
+test.describe('OV1_19', () => {
+    test('Trade Agreement5 Sales UK Cusotmer and Manu item', async ({ page }) => {
 
         const productName = "OV1EUItemNumber5765";
-        const customer = "OV1EUCUST2128";
+        const customer = "OV1UKCUST0323";
 
         // Navigate to the vendor list page and click the 'New' button
         await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=PriceDiscAdmTable_Purch', { waitUntil: 'networkidle' });
@@ -17,7 +16,7 @@ test.describe('OV1_18', () => {
 
         await ui.inputSelector('input[aria-label="Name"]', 'PriceList');
 
-        await ui.inputSelector('input[aria-label="Description"]', 'SB NOV 2024');
+        await ui.inputSelector('input[aria-label="Description"]', 'SB April 2024');
 
         await ui.button('Save');
 
@@ -39,9 +38,9 @@ test.describe('OV1_18', () => {
 
         await ui.lookupSelectWithIcon('input[aria-label="Currency"]', 'GBP');
 
-        await ui.inputSelector('input[name="FromDate"]', moment().format('MM/DD/YY'));
+        await ui.inputSelector('input[name="FromDate"]', '10/28/2024');
 
-        await ui.inputSelector('input[name="FromDate"]',  moment().add(2, 'M').format('MM/DD/YY'));
+        await ui.inputSelector('input[name="FromDate"]', '12/31/2024');
 
         await ui.lookupSelectWithIcon('input[aria-label="Item relation"]', productName);
 
