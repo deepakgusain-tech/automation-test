@@ -41,7 +41,7 @@ test.describe('OV1_18', () => {
 
         await ui.inputSelector('input[name="FromDate"]', moment().format('MM/DD/YY'));
 
-        await ui.inputSelector('input[name="FromDate"]',  moment().add(2, 'M').format('MM/DD/YY'));
+        await ui.inputSelector('input[name="ToDate"]',  moment().add(2, 'M').format('MM/DD/YY'));
 
         await ui.lookupSelectWithIcon('input[aria-label="Item relation"]', productName);
 

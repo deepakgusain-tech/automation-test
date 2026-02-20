@@ -40,7 +40,7 @@ test.describe('OV1_19', () => {
 
         await ui.inputSelector('input[name="FromDate"]', '10/28/2024');
 
-        await ui.inputSelector('input[name="FromDate"]', '12/31/2024');
+        await ui.inputSelector('input[name="ToDate"]', '12/31/2024');
 
         await ui.lookupSelectWithIcon('input[aria-label="Item relation"]', productName);
 
