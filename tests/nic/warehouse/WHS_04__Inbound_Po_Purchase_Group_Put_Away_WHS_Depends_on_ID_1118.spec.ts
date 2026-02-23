@@ -7,13 +7,9 @@ const path = require('path');
 test.describe('WHS_01', () => {
     test('WHS_01_(Inbound PO)_Purchase_Order', async ({ page }) => {
 
-        const loadId = "LOAD008346";
-        const itemNumber = "83-003";
-        const batchNumber = "BH_" + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+        const licensePlate = "173943790000344439";
 
-        console.log(batchNumber);
-
-        await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ni01&mi=action:WHSWorkExecute');
+        await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ni01&mi=action:WHSWorkExecute', { waitUntil: 'commit' });
 
         let ui: UIElement | null = new UIElement(page);
 
@@ -26,33 +22,19 @@ test.describe('WHS_01', () => {
 
         await ui.button("Inbound");
 
-        await page.waitForTimeout(4000)
+        await page.waitForTimeout(2000)
 
-        await ui.button("Load item receiving")
+        await ui.button("Purchase Group Put-away")
 
-        await ui.inputSelector('input[name="LoadId"]', loadId);
+        await ui.inputSelector('input[name="WHSWorkLicensePlateId"]', licensePlate);
 
-        await ui.button("Ok")
-
-        await ui.inputSelector('input[name="ItemId"]', itemNumber);
+        await ui.button("Ok")        
 
         await ui.button("Ok")
 
-        await ui.inputSelector('input[name="Qty"]', "36");
+        await ui.button("Done")
 
         await ui.button("Ok")
-
-        await ui.selectBox('input[name="Disposition"]', 'Available')
-
-        await ui.button("Ok")
-
-        await ui.inputSelector('input[name="InventBatchId"]', batchNumber)
-
-        await ui.inputSelector('input[name="OFIVendBestBeforeDateUserFormat"]', moment().format('YY-MM-DD'))
-
-        await ui.button("Ok");
-
-        await page.waitForTimeout(4000);
 
         const message = page.locator('[data-dyn-controlname="error"]', {hasText: 'Work Completed'});
 

@@ -43,6 +43,6 @@ test.describe('WHS_01', () => {
 
         await ui.button("Back", 1)
 
-        await page.waitForTimeout(30000);
+        console.log("Test run successfully");
     });
 });

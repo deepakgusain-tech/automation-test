@@ -10,7 +10,7 @@ test.describe('OV1_21', () => {
         const itemNumber = "OV1EUItemNumber5765"
 
         // Navigate to the vendor list page and click the 'New' button
-        await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=PriceDiscAdmTable_Purch', { waitUntil: 'networkidle' });
+        await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=PriceDiscAdmTable_Purch', { waitUntil: 'commit' });
 
         let ui = new UIElement(page)
 
