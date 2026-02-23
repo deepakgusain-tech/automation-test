@@ -47,7 +47,6 @@ export default class UIElement {
     async getInputValue(selector: string, step: number = 0): Promise<string | void> {
         const input = this.getLocator(selector).nth(step);
         const value = await input.inputValue();
-        // fs.writeFileSync(path.join(__dirname, 'product.txt'), value);
         return value
     }
 
@@ -73,7 +72,7 @@ export default class UIElement {
     async clickElement(selector: string, step: number = 0) {
         const element = this.page.locator(selector).nth(step);
 
-        await element.scrollIntoViewIfNeeded();
+        // await element.scrollIntoViewIfNeeded();
 
         const blocker = this.page.locator('#ShellBlockingDiv');
         if (await blocker.isVisible().catch(() => false)) {
@@ -117,6 +116,22 @@ export default class UIElement {
     }
 
     /**
+      * Lookup field selection with click icon
+      * @param fieldSelector - The input field selector
+      * @param value - The item to select from the dropdown
+      */
+    async clickLookupSelectWithIcon(fieldSelector: string, step: number = 0) {
+        const field = this.getLocator(fieldSelector).nth(step);
+        await this.page.waitForTimeout(1000);
+
+        const handle = await field.evaluateHandle(node => node.nextElementSibling);
+
+        if (!handle) return;
+
+        await handle.asElement()?.click();
+    }
+
+    /**
        * Lookup field selection with click icon
        * @param fieldSelector - The input field selector
        * @param value - The item to select from the dropdown
@@ -140,12 +155,10 @@ export default class UIElement {
             await field.press('Backspace');
         }
 
-        await this.page.waitForTimeout(1000);
-
-        await this.page.keyboard.type(value, { delay: 1000 });
-
+        await this.page.keyboard.type(value, { delay: 2000 });
         const inputField = this.page.locator(`input[value="${value}"]:visible`).first();
-        await inputField.click({ force: true });
+        await this.page.waitForTimeout(1000);
+        await inputField.click();
     }
 
     /**
@@ -198,11 +211,13 @@ export default class UIElement {
 
         await this.page.waitForLoadState('networkidle');
 
+        await this.page.waitForTimeout(2000);
+
         const inputField = this.page.locator(`input[value="${value}"]`).first();
+
         await inputField.click();
+
     }
-
-
 
     async close() {
         this.page.close();
