@@ -60,8 +60,9 @@ export default class UIElement {
     /**
      * Click an element by button selector
      */
-    async button(buttonName: string, buttonNumber: number = 0) {
-        const element = this.page.getByRole('button', { name: new RegExp(buttonName, 'i') }).nth(buttonNumber);
+    async button(buttonName: string, step: number = 0) {
+
+        const element = this.page.getByRole('button', { name: new RegExp(buttonName, 'i') }).nth(step);
         await element.click();
     }
 

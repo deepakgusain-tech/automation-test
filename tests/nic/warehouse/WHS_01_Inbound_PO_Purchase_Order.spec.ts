@@ -57,8 +57,6 @@ test.describe('WHS_01', () => {
 
         await page.waitForLoadState("networkidle");
 
-        await ui.button("Add Line")
-
         await ui.lookupSelectWithIcon('input[aria-label="Item number"]', "83-003")
 
         await ui.inputSelector('input[aria-label="Quantity"]', "36.00")
@@ -78,8 +76,5 @@ test.describe('WHS_01', () => {
         console.log(get);
 
         await ui.button("Back", 1);
-
-        await page.waitForTimeout(30000);
-
     });
 });
