@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
 const fs = require('fs');
 const path = require('path');
+import { getData } from '../../utils/runtimedata';
 
 test.describe('OV01_08', () => {
     test('Sales Agreement', async ({ page }) => {
@@ -10,13 +11,11 @@ test.describe('OV01_08', () => {
 
         let ui : UIElement | null = new UIElement(page);
 
-        const customer = "OV1UKCUST1";
+        const customer = getData('customerAccount(UK)');
        
         await ui.button('New');
 
         await page.waitForTimeout(1000);
-
-        // await ui.clickElement('button[aria-label="Customer"][aria-expanded="false"]');
 
         await ui.lookupSelectWithIcon('[id*="SalesAgreementHeader_CustAccount_input"]', customer)
 
@@ -34,7 +33,7 @@ test.describe('OV01_08', () => {
 
         await ui.clickElement('span[id*="NewLineGridCmdButton_label"]')
 
-        const itemNumber = "OV1EUItemNumber7561"
+        const itemNumber = getData('productName(UK)');
 
         await ui.lookupSelectWithIcon('input[id*="AgreementLine_ItemId"]', itemNumber)
 

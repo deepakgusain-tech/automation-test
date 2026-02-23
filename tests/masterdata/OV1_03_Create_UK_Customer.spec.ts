@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
 const fs = require('fs');
 const path = require('path');
+import { saveData } from '../../utils/runtimedata';
 
 test.describe('OV01_03', () => {
     test('Create UK Customer', async ({ page }) => {
@@ -24,7 +25,8 @@ test.describe('OV01_03', () => {
         await expect(dialogTitle).toContainText('Create customer');
 
         let customerAccount = "OV1UKCUST" + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-
+        
+        saveData('customerAccount(UK)', customerAccount);
         // details section
         // Verify the 'Details' section header is visible and expanded by default
         const detailsHeader = page.locator('button:has-text("Details")').first();

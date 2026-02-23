@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
+import { saveData } from '../../utils/runtimedata';
 
 test.describe('OV1_02', () => {
   test('Create EU Supplier', async ({ page }) => {
@@ -20,8 +21,12 @@ test.describe('OV1_02', () => {
     const identificationHeading = page.locator('text=Identification').first();
     await expect(identificationHeading).toBeVisible();
 
-    const vendorAccountField = await ui.getInputValue('input[aria-labelledby*="AccountNum"]')
-    console.log(vendorAccountField);
+    // const vendorAccountField = await ui.getInputValue('input[aria-labelledby*="AccountNum"]')
+    // console.log(vendorAccountField);
+
+    const supplierId = await page.locator('input[name="Identification_AccountNum"]').inputValue();
+    
+        saveData('supplierId(EU)', supplierId);
 
     const vendorName = "OV1EUSUP" + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
     console.log(vendorName);

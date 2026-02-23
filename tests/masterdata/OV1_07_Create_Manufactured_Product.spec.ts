@@ -1,5 +1,7 @@
 import { test } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
+import { getData } from '../../utils/runtimedata';
+import { saveData } from '../../utils/runtimedata';
 
 test.describe('OV1_07', () => {
     test('Create Manufactured Product', async ({ page }) => {
@@ -8,7 +10,8 @@ test.describe('OV1_07', () => {
 
         let ui : UIElement | null = new UIElement(page);
         const productName = "V1MANUProduct" + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-
+        
+        saveData('MANUFProduct(UK)', productName); 
         // step 1
         await ui.button('New');
 
@@ -26,8 +29,13 @@ test.describe('OV1_07', () => {
         await ui.lookupSelectWithIcon('input[id*="CustomProductUnit_input"]', 'ea');
 
         // step 6
-        const productNumber = await ui.getInputValue('input[id*="Identification_ProductNumber_input"]');
+        // const productNumber = await ui.getInputValue('input[id*="Identification_ProductNumber_input"]');
+        
+        const productNumber = await page.locator('input[id*="Identification_ProductNumber_input"]').inputValue();
 
+        saveData('MANUFProductNO(UK)', productNumber); 
+
+        console.log(productNumber);
         // step 7
         await ui.button('OK');
 
@@ -116,13 +124,15 @@ test.describe('OV1_07', () => {
 
         await page.waitForLoadState('networkidle');
 
-        await ui.lookupSelectWithIcon('input[id*="PdsApprovedVendorList_PdsApprovedVendor"]', "S1482");
+        const supplierId = getData('supplierId(UK)');
+
+        await ui.lookupSelectWithIcon('input[id*="PdsApprovedVendorList_PdsApprovedVendor"]', supplierId);
 
         await ui.button('Save');
 
         await ui.backButton(1);
 
-        await ui.lookupSelectWithIcon('input[id*="PurchaseAdministration_PrimaryVendorId_input"]', "S1482");
+        await ui.lookupSelectWithIcon('input[id*="PurchaseAdministration_PrimaryVendorId_input"]', supplierId);
 
         await ui.selectBox('input[id*="InventTable_PdsVendorCheckItem_input"]', 'Not allowed');
 

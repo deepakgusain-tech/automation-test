@@ -1,12 +1,14 @@
 
 import { test, expect } from "@playwright/test";
 import UIElement from "../../utils/ui-elements";
+import { saveData } from '../../utils/runtimedata';
+import { getData } from '../../utils/runtimedata';
 
 test.describe("OV1_09_UK – Create Purchase Order", () => {
   test("Create, Register and Receive Purchase Order", async ({ page }) => {
 
-    const supplierAccount = "S1691";
-    const itemNumber = "OV1UKItemNumber1003";
+    // const supplierAccount = "S1691";
+    // const itemNumber = "OV1UKItemNumber1003";
     const site = "LE";
     const warehouse = "LE";
     const quantity = "1000";
@@ -24,10 +26,16 @@ test.describe("OV1_09_UK – Create Purchase Order", () => {
 
     await ui.button("New");
 
-    await ui.lookupSelectWithIcon('input[id*="PurchTable_OrderAccount_input"]', supplierAccount);
+    const supplierId = getData('supplierId(UK)');
+
+    await ui.lookupSelectWithIcon('input[id*="PurchTable_OrderAccount_input"]', supplierId);
 
     const poNumber = await ui.getInputValue('input[id*="PurchTable_PurchId_input"]');
     expect(poNumber).toBeTruthy();
+
+    let POnumber = poNumber;
+    saveData('POnumber(UK)', POnumber as string);
+
     console.log("PO Number:", poNumber);
 
     await ui.lookupSelectWithIcon('input[id*="PurchTable_InventSiteId_input"]', site);
@@ -35,6 +43,8 @@ test.describe("OV1_09_UK – Create Purchase Order", () => {
     await ui.lookupSelectWithIcon('input[id*="PurchTable_InventLocationId_input"]', warehouse);
 
     await ui.button("OK");
+
+    const itemNumber = getData('productName(UK)');
 
     await ui.lookupSelectWithIcon('input[aria-label="Item number"]', itemNumber);
 
@@ -77,13 +87,16 @@ test.describe("OV1_09_UK – Create Purchase Order", () => {
 
     await ui.viewLookup('input[id*="InventoryDimensions_inventBatchId"]', "View details");
 
-    await ui.clickElement('span[id*="SystemDefinedNewButton_label"]');
+    await ui.clickElement('span[id*="SystemDefinedNewButton_label"]',1);
 
     let batchNumber: any = "BN_" + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
 
     await ui.inputSelector('input[name="Header_InventBatchId"]', batchNumber)
 
     batchNumber = await ui.getInputValue('input[name="Header_InventBatchId"]');
+
+    // let  = poNumber;
+    saveData('batchNumber(UK)', batchNumber as string);
 
     await ui.button("Save");
 

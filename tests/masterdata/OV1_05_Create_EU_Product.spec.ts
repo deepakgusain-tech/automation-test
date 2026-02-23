@@ -2,6 +2,8 @@ import { test, expect } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
 const fs = require('fs');
 const path = require('path');
+import { getData } from '../../utils/runtimedata';
+import { saveData } from '../../utils/runtimedata';
 
 test.describe('OV1_05_Create_EU_Product', () => {
     test('OV1_05', async ({ page }) => {
@@ -10,7 +12,10 @@ test.describe('OV1_05_Create_EU_Product', () => {
 
         let ui: UIElement | null = new UIElement(page);
         const productName = "OV1EUItemNumber" + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+        
+        saveData('productName(EU)', productName); 
 
+        console.log(productName);
         // step 1
         await ui.button('New');
 
@@ -27,8 +32,12 @@ test.describe('OV1_05_Create_EU_Product', () => {
         await ui.lookupSelectWithIcon('input[id*="CustomProductUnit_input"]', 'kg');
 
         // step 6
-        const productNumber = await ui.getInputValue('input[id*="Identification_ProductNumber_input"]');
+        // const productNumber = await ui.getInputValue('input[id*="Identification_ProductNumber_input"]');
+        
+        const productNumber = await page.locator('input[id*="Identification_ProductNumber_input"]').inputValue();
 
+        saveData('productNumber(EU)', productNumber);
+        
         console.log(productNumber);
 
         // step 7
@@ -125,13 +134,15 @@ test.describe('OV1_05_Create_EU_Product', () => {
 
         await page.waitForLoadState('networkidle');
 
-        await ui.lookupSelectWithIcon('input[id*="PdsApprovedVendorList_PdsApprovedVendor"]', "S1482");
+        const supplierId = getData('supplierId(EU)');
+
+        await ui.lookupSelectWithIcon('input[id*="PdsApprovedVendorList_PdsApprovedVendor"]', supplierId );
 
         await ui.button('Save');
 
         await ui.backButton(1);
 
-        await ui.lookupSelectWithIcon('input[id*="PurchaseAdministration_PrimaryVendorId_input"]', "S1482");
+        await ui.lookupSelectWithIcon('input[id*="PurchaseAdministration_PrimaryVendorId_input"]', supplierId);
 
         await ui.selectBox('input[id*="InventTable_PdsVendorCheckItem_input"]', 'Not allowed');
 
