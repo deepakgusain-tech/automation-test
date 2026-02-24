@@ -6,3 +6,6 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+auth.1767178832913.json
+auth.backup.json
+auth.json

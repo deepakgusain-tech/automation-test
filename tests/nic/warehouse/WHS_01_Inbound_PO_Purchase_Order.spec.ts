@@ -34,12 +34,9 @@ test.describe('WHS_01', () => {
 
         await page.waitForTimeout(2000);
 
-        const inputField = page.locator(`input[value="${vendor}"]`).first();
+        await ui.inputSelector('input[name="PurchTable_OrderAccount"]', vendor)
 
-        const html = await inputField.evaluate(el => el.outerHTML);
-        console.log(html);
-        
-        // await inputField.click();
+        await page.keyboard.press('Tab');
 
         await page.waitForTimeout(5000);
 
