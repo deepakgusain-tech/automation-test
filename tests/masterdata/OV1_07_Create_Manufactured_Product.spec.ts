@@ -11,7 +11,6 @@ test.describe('OV1_07', () => {
         let ui : UIElement | null = new UIElement(page);
         const productName = "V1MANUProduct" + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
         
-        saveData('MANUFProduct(UK)', productName); 
         // step 1
         await ui.button('New');
 
@@ -84,7 +83,7 @@ test.describe('OV1_07', () => {
         // step 20
         ui = null;
 
-        await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=EcoResProductDetailsExtendedGrid');
+         await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=EcoResProductDetailsExtendedGrid',  { waitUntil: 'domcontentloaded', timeout: 20000 });
 
         ui = new UIElement(page);
 
@@ -187,7 +186,8 @@ test.describe('OV1_07', () => {
 
         await ui.button('Save');
 
-        await page.waitForTimeout(10000);
+        saveData('MANUFProduct(UK)', productName); 
 
+        await page.waitForTimeout(10000);
     });
 });

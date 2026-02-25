@@ -104,7 +104,7 @@ export default class UIElement {
 
         const field = this.page.getByLabel(fieldSelector).first();
 
-        field.click();
+        await field.click();
 
         await field.evaluate(node => {
             (node.nextElementSibling as HTMLElement)?.click();
@@ -112,8 +112,13 @@ export default class UIElement {
 
         await this.page.waitForTimeout(1000);
 
-        const inputField = this.page.locator(`input[value="${value}"]`).first();
-        await inputField.click({ force: true });
+        const inputField = this.page.locator(`input[value="${value}"]:visible`).first();
+
+        await inputField.waitFor({ state: 'visible' });
+        await inputField.scrollIntoViewIfNeeded();
+        await inputField.focus();
+
+        await inputField.press('Enter');
     }
 
     /**
@@ -137,7 +142,7 @@ export default class UIElement {
        * @param fieldSelector - The input field selector
        * @param value - The item to select from the dropdown
        */
-    async lookupSelectWithIcon(fieldSelector: string, value: string, step: number = 0) {
+    async lookupSelectWithIcon(fieldSelector: string, value: string, step: number = 0) {  
 
         const field = this.getLocator(fieldSelector).nth(step);
 
@@ -155,11 +160,22 @@ export default class UIElement {
             await field.press('Control+A');
             await field.press('Backspace');
         }
+        
+        await field.fill('');
 
         await this.page.keyboard.type(value, { delay: 2000 });
+
         const inputField = this.page.locator(`input[value="${value}"]:visible`).first();
+
+        // const html = await inputField.evaluate(el => el.outerHTML);
+        // console.log(html);
+
         await this.page.waitForTimeout(1000);
-        await inputField.click();
+        await inputField.waitFor({ state: 'visible' });
+        await inputField.scrollIntoViewIfNeeded();
+        await inputField.focus();
+
+        await inputField.press('Enter');
     }
 
     /**
@@ -217,7 +233,6 @@ export default class UIElement {
         const inputField = this.page.locator(`input[value="${value}"]`).first();
 
         await inputField.click();
-
     }
 
     async close() {

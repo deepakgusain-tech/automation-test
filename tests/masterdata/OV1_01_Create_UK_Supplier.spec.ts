@@ -1,5 +1,5 @@
 // import { test, expect } from '@playwright/test';
-import {test,expect } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
 import { saveData } from '../../utils/runtimedata';
 
@@ -7,7 +7,7 @@ test.describe('OV1_01', () => {
   test('Create UK Supplier', async ({ page }) => {
 
     // Navigate to the vendor list page and click the 'New' button
-    await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=VendTableListPage',  { waitUntil: 'networkidle' });
+    await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=VendTableListPage', { waitUntil: 'networkidle' });
 
     const ui = new UIElement(page)
 
@@ -22,11 +22,6 @@ test.describe('OV1_01', () => {
     await expect(identificationHeading).toBeVisible();
 
     const supplierId = await page.locator('input[name="Identification_AccountNum"]').inputValue();
-
-    saveData('supplierId(UK)', supplierId);
-
-    // const vendorAccountField = await ui.getInputValue('input[aria-labelledby*="AccountNum"]')
-    // console.log(vendorAccountField);
 
     const vendorName = "OV1UKSUP" + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
 
@@ -107,6 +102,8 @@ test.describe('OV1_01', () => {
     await ui.lookupSelectWithIcon('input[id*="Delivery_DlvTerm_input"]', "DAP");
 
     await ui.button('Save');
+
+    saveData('supplierId(UK)', supplierId);
   });
 });
 

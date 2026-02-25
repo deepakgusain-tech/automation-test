@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import UIElement from "../../utils/ui-elements";
+import { getData } from "../../utils/runtimedata";
 
 test.describe("OV01_15", () => {
     test("Trade Agreement_EU Item_EU Supplier and EU Customer", async ({
@@ -11,10 +12,10 @@ test.describe("OV01_15", () => {
 
         let ui: UIElement | null = new UIElement(page);
 
-        const ItemNumber = "OV1EUItemNumber7561";
-        const SUPPLIER_ACCOUNT = "S1327";
+        const ItemNumber =  getData('productName(EU)');
+        const customer =  getData('customerAccount(EU)');
 
-        const salesAggrementId = "OV01-000087";
+        const SUPPLIER_ACCOUNT = getData('supplierId(EU)');
 
         await ui.filterOption('[id*="InventTable_ItemIdGrid"]', 'input[id*="ItemIdGrid_ItemId_Input"]', ItemNumber);
 
@@ -61,7 +62,7 @@ test.describe("OV01_15", () => {
 
         await ui.filterOption('div[id*="PriceDiscAdmTable_JournalNum"]', 'input[id*="__FilterField_PriceDiscAdmTable_JournalNum_JournalNum_Input"]', getPriceDiscountID);
 
-        await ui.clickElement('button[data-dyn-controlname="SystemDefinedRefreshButton"][command="Refresh"]', 1);
+        // await ui.clickElement('button[data-dyn-controlname="SystemDefinedRefreshButton"][command="Refresh"]', 1);
 
         await ui.selectBox('input[id*="PriceDiscAdmTable"][id*="AllOpenPosted_input"]', 'All', 1);
 
@@ -89,7 +90,7 @@ test.describe("OV01_15", () => {
         await ui.button("Lines");
 
         await ui.inputSelector('input[aria-label="Party code type"]', "Table");
-        await ui.lookupSelectWithIcon('input[aria-label="Account selection"]', "OV1UKCUST8813");
+        await ui.lookupSelectWithIcon('input[aria-label="Account selection"]', customer);
         await ui.inputSelector('input[aria-label="Product code type"]', "Table");
         await ui.inputSelector('input[aria-label="Item relation"]', ItemNumber);
 
@@ -108,7 +109,7 @@ test.describe("OV01_15", () => {
 
         await ui.selectBox('input[id*="PriceDiscAdmTable"][id*="AllOpenPosted_input"]', 'Posted', 1);
 
-        await ui.filterOption('div[id*="PriceDiscAdmTable_JournalNum_"][id*="_header"]', 'input[id*="__FilterField_PriceDiscAdmTable_JournalNum_JournalNum_Input_input"]', getPriceDiscountID, 1);
+        await ui.filterOption('div[id*="PriceDiscAdmTable_JournalNum_"][id*="_header"]', 'input[name*="FilterField_PriceDiscAdmTable_JournalNum_JournalNum_Input_"]', getPriceDiscountID, 1);
 
         await page.waitForTimeout(30000);
     });

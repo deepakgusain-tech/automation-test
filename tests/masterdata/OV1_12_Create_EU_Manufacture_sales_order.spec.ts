@@ -1,5 +1,7 @@
 import { test } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
+import { getData } from '../../utils/runtimedata';
+import moment from 'moment';
 
 test.describe('OV01_12', () => {
     test('Create EU Manufacture sales order', async ({ page }) => {
@@ -8,9 +10,7 @@ test.describe('OV01_12', () => {
 
         let ui: UIElement | null = new UIElement(page);
 
-        const customer = "OV1UKCUST8813";
-
-        const salesAggrementId = "OV01-000087";
+        const customer = getData('customerAccount(EU)');
 
         await ui.button('New');
 
@@ -24,14 +24,9 @@ test.describe('OV01_12', () => {
 
         await ui.inputSelector('input[id*="PurchOrderFormNum_input"]', 'TEST OV01 MAN')
 
-        const now = new Date()
-        const next7Days = new Date();
-        next7Days.setDate(now.getDate() + 7);
-        const formattedDate = now.toLocaleDateString()
+        await ui.inputSelector('input[id*="SalesTable_ReceiptDateRequested_input"]', moment().format("MM/DD/YY"))
 
-        await ui.inputSelector('input[id*="SalesTable_ReceiptDateRequested_input"]', formattedDate)
-
-        await ui.inputSelector('input[id*="SalesTable_ShippingDateRequested_input"]', formattedDate)
+        await ui.inputSelector('input[id*="SalesTable_ShippingDateRequested_input"]', moment().format("MM/DD/YY"))
 
         const getSaleOrderId = await ui.getInputValue('input[id*="SalesTable_SalesId_input"]')
 
@@ -43,7 +38,7 @@ test.describe('OV01_12', () => {
 
         await ui.button('Ok');
 
-        const itemNumber = "OV1EUItemNumber7561"
+        const itemNumber = getData('productName(EU)');
 
         await ui.lookupSelectWithIcon('[aria-label="Item number"]', itemNumber);
 

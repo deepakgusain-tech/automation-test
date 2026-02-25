@@ -25,12 +25,12 @@ test.describe('OV1_02', () => {
     // console.log(vendorAccountField);
 
     const supplierId = await page.locator('input[name="Identification_AccountNum"]').inputValue();
-    
-        saveData('supplierId(EU)', supplierId);
+
+
 
     const vendorName = "OV1EUSUP" + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
     console.log(vendorName);
-    
+
     await ui.inputSelector('input[aria-labelledby*="Name"]', vendorName)
 
     await ui.inputSelector('input[aria-labelledby*="NameAlias"]', vendorName)
@@ -46,7 +46,7 @@ test.describe('OV1_02', () => {
       await addressTab.click();
     }
 
-    
+
     await page.waitForTimeout(2000);
 
     await ui.clickElement("button[name='NewAddress']")
@@ -117,6 +117,8 @@ test.describe('OV1_02', () => {
     await ui.lookupSelectWithIcon('input[id*="Delivery_DlvTerm_input"]', "FCA");
 
     await ui.button('Save');
+
+    saveData('supplierId(EU)', supplierId);
 
     await page.waitForTimeout(30000);
 

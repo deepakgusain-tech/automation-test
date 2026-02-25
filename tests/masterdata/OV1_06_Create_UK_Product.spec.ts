@@ -10,13 +10,12 @@ test.describe('OV01_06', () => {
 
         await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=EcoResProductListPage');
 
-        let ui : UIElement | null = new UIElement(page);
+        let ui: UIElement | null = new UIElement(page);
         const productName = "OV1UKItemNumber" + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-        
-        saveData('productName(UK)', productName); 
+
 
         console.log(productName);
-        
+
         // step 1
         await ui.button('New');
 
@@ -33,16 +32,10 @@ test.describe('OV01_06', () => {
         await ui.lookupSelectWithIcon('input[id*="CustomProductUnit_input"]', 'kg');
 
         // step 6
-        // const productNumber = await ui.getInputValue('input[id*="Identification_ProductNumber_input"]');
-        
-        // console.log(productNumber);
-        // const productnumber=productNumber
-        // saveData('productnumber(UK)', productnumber); 
-
         const productNumber = await page.locator('input[id*="Identification_ProductNumber_input"]').inputValue();
 
         saveData('productNumber(UK)', productNumber);
-        
+
         // step 7
         await ui.button('OK');
 
@@ -85,7 +78,7 @@ test.describe('OV01_06', () => {
         // step 18
         await ui.button('Finish');
 
-       await page.waitForTimeout(6000);
+        await page.waitForTimeout(6000);
 
         // step 19
         await ui.backButton(1);
@@ -93,7 +86,7 @@ test.describe('OV01_06', () => {
         // step 20
         ui = null;
 
-        await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=EcoResProductDetailsExtendedGrid');
+        await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=EcoResProductDetailsExtendedGrid', { waitUntil: 'domcontentloaded', timeout: 20000 });
 
         ui = new UIElement(page);
 
@@ -135,7 +128,7 @@ test.describe('OV01_06', () => {
 
         const supplierId = getData('supplierId(UK)');
 
-// await page.fill('#SupplierField', supplierId);
+        // await page.fill('#SupplierField', supplierId);
 
         await ui.lookupSelectWithIcon('input[id*="PdsApprovedVendorList_PdsApprovedVendor"]', supplierId);
 
@@ -147,7 +140,16 @@ test.describe('OV01_06', () => {
 
         await ui.selectBox('input[id*="InventTable_PdsVendorCheckItem_input"]', 'Not allowed');
 
-        await ui.clickElement('[id*="DropShipment_toggle"]')
+        const toggle = page.locator('[id$="_DropShipment_toggle"]');
+
+        await page.waitForTimeout(4000);
+
+        if (await toggle.getAttribute('aria-checked') === 'false') {
+            await toggle.press('Space');
+        }
+
+
+        await page.waitForTimeout(4000);
 
         await ui.lookupSelectWithIcon('input[id*="DefaultDropShipmentWarehouse_input"]', "TWD");
 
@@ -198,6 +200,9 @@ test.describe('OV01_06', () => {
         await ui.inputSelector('input[id*="CostBasePrice_Price_input"]', "5")
 
         await ui.button('Save');
+
+        saveData('productName(UK)', productName);
+
 
         await page.waitForTimeout(10000);
 

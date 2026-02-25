@@ -1,5 +1,7 @@
 import { test } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
+import { getData } from '../../utils/runtimedata';
+import moment from 'moment';
 
 function formatDate(date: Date) {
     const pad = (n: any) => String(n).padStart(2, '0');
@@ -16,9 +18,8 @@ test.describe('OV01_11', () => {
 
         let ui: UIElement | null = new UIElement(page);
 
-        const customer = "OV1EUCUST3278";
+        const customer = getData('customerAccount(EU)');
 
-        // const salesAggrementId = "OV01-000087";
 
         await ui.button('New');
 
@@ -32,18 +33,13 @@ test.describe('OV01_11', () => {
 
         await ui.inputSelector('input[id*="PurchOrderFormNum_input"]', 'TEST OV01 DD')
 
-        const now = new Date()
-        const next7Days = new Date();
-        next7Days.setDate(now.getDate() + 7);
-        const formattedDate = now.toLocaleDateString()
+        await ui.inputSelector('input[id*="SalesTable_ReceiptDateRequested_input"]', moment().format("MM/DD/YY"))
 
-        await ui.inputSelector('input[id*="SalesTable_ReceiptDateRequested_input"]', formattedDate)
-
-        await ui.inputSelector('input[id*="SalesTable_ShippingDateRequested_input"]', formattedDate)
+        await ui.inputSelector('input[id*="SalesTable_ShippingDateRequested_input"]', moment().format("MM/DD/YY"))
 
         await ui.button('Ok');
 
-        const itemNumber = "OV1EUItemNumber7561"
+        const itemNumber = getData('productName(EU)');
 
         await ui.lookupSelectWithIcon('[aria-label="Item number"]', itemNumber);
 
@@ -86,8 +82,6 @@ test.describe('OV01_11', () => {
         await ui.button("Save")
 
         await ui.clickElement("li[id*='TabLineDelivery_header']", 1)
-
-        // work on this  Type value Script / SDCD to Confirmed receipt date
 
         const getDRD = await ui.getInputValue('input[id*="DeliveryDate_input"]')
 

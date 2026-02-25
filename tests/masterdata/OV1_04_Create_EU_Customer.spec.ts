@@ -26,7 +26,7 @@ test.describe("OV1_04", () => {
 
     let customerAccount = "OV1EUCUST" + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
 
-    saveData('customerAccount(EU)', customerAccount);
+
 
     // details section
     // Verify the 'Details' section header is visible and expanded by default
@@ -116,5 +116,6 @@ test.describe("OV1_04", () => {
 
     await page.getByRole('button', { name: /Close/ }).nth(1).click();
 
+    saveData('customerAccount(EU)', customerAccount);
   });
 });

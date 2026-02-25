@@ -1,5 +1,6 @@
 import { test } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
+import { getData } from '../../utils/runtimedata';
 
 test.describe('OV1_10_', () => {
     test('UK Create stock sales order', async ({ page }) => {
@@ -7,9 +8,13 @@ test.describe('OV1_10_', () => {
 
         let ui: UIElement | null = new UIElement(page);
 
+         const customer = getData('customerAccount(UK)');
+
+         const productName = getData('productName(UK)');
+
         await ui.button('New');
 
-        await ui.lookupSelectWithIcon('input[id*="CustAccount_input"]', "UKCUST8758");
+        await ui.lookupSelectWithIcon('input[id*="CustAccount_input"]', customer);
 
         await ui.lookupSelectWithIcon('input[id*="InventSiteId_input"]', "LE");
 
@@ -23,7 +28,7 @@ test.describe('OV1_10_', () => {
 
         await ui.button('OK');
 
-        await ui.inputSelector('input[id*="SalesLine_ItemId"]', "OV1EUItemNumber7561");
+        await ui.inputSelector('input[id*="SalesLine_ItemId"]', productName);
 
         await ui.inputSelector('input[id*="SalesLine_SalesQty"]', "1000");
 

@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import UIElement from "../../utils/ui-elements";
+import { getData } from "../../utils/runtimedata";
 
 test.describe("OV01_16", () => {
     test("Trade Agreement2_UK Item_UK Supplier and UK Customer", async ({
@@ -9,13 +10,13 @@ test.describe("OV01_16", () => {
 
         let ui: UIElement | null = new UIElement(page);
 
-        const ItemNumber = "OV1UKItemNumber3678";
-        const customer = "OV1UKCUST0283";
-        const SUPPLIER_ACCOUNT = "S1497";
+        const ItemNumber = getData('productName(UK)');
+        const customer =  getData('customerAccount(UK)');
+        const SUPPLIER_ACCOUNT = getData('supplierId(UK)');
 
         await ui.filterOption('[id*="InventTable_ItemIdGrid"]', 'input[id*="ItemIdGrid_ItemId_Input"]', ItemNumber);
 
-        await page.waitForTimeout(8000);
+        await page.waitForTimeout(2000);
 
         await ui.button("Purchase");
 
@@ -122,7 +123,5 @@ test.describe("OV01_16", () => {
         if(isChecked) {
             console.log("test case successfully completed");
         }
-
-        await page.waitForTimeout(30000);
     });
 });

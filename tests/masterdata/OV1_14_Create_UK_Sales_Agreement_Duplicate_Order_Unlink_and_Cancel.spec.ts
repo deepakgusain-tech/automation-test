@@ -1,5 +1,6 @@
 import { test } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
+import { getData } from '../../utils/runtimedata';
 
 test.describe('OV01_14', () => {
     test('UK Sales Agreement', async ({ page }) => {
@@ -8,10 +9,12 @@ test.describe('OV01_14', () => {
 
         let ui: UIElement | null = new UIElement(page);
 
-        const customer = "OV1UKCUST1";
+        const customer = getData('customerAccount(UK)');
 
-        const salesAggrementId = "OV01-000087";
+        const salesAggrementId = getData("SalesAggrementID(UK)");
 
+        console.log(salesAggrementId);
+        
         await ui.button('New');
 
         await ui.lookupSelectWithIcon('[id*="CustAccount_input"]', customer)
@@ -34,7 +37,7 @@ test.describe('OV01_14', () => {
 
         await ui.button('Ok');
 
-        const itemNumber = "OV1EUItemNumber7561"
+        const itemNumber = getData('productName(UK)');
 
         await ui.lookupSelectWithIcon('[aria-label="Item number"]', itemNumber);
 

@@ -13,7 +13,6 @@ test.describe('OV1_05_Create_EU_Product', () => {
         let ui: UIElement | null = new UIElement(page);
         const productName = "OV1EUItemNumber" + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
         
-        saveData('productName(EU)', productName); 
 
         console.log(productName);
         // step 1
@@ -90,7 +89,7 @@ test.describe('OV1_05_Create_EU_Product', () => {
         // step 20
         ui = null;
 
-        await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=EcoResProductDetailsExtendedGrid');
+         await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=EcoResProductDetailsExtendedGrid',  { waitUntil: 'domcontentloaded', timeout: 20000 });
 
         ui = new UIElement(page);
 
@@ -205,6 +204,8 @@ test.describe('OV1_05_Create_EU_Product', () => {
         await ui.inputSelector('input[id*="CostBasePrice_Price_input"]', "5")
 
         await ui.button('Save');
+
+        saveData('productName(EU)', productName); 
 
         await page.waitForTimeout(10000);
 
