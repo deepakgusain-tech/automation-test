@@ -1,6 +1,7 @@
 import { test } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
 import { getData } from '../../utils/runtimedata';
+import moment from 'moment';
 
 test.describe('OV1_10_', () => {
     test('UK Create stock sales order', async ({ page }) => {
@@ -8,9 +9,9 @@ test.describe('OV1_10_', () => {
 
         let ui: UIElement | null = new UIElement(page);
 
-         const customer = getData('customerAccount(UK)');
+        const customer = getData('customerAccount(UK)');
 
-         const productName = getData('productName(UK)');
+        const productName = getData('productName(UK)');
 
         await ui.button('New');
 
@@ -22,9 +23,9 @@ test.describe('OV1_10_', () => {
 
         await ui.inputSelector('input[id*="CustomerRef_input"]', "Test Sales agreement ");
 
-        await ui.inputSelector('input[id*="ReceiptDateRequested_input"]', "11/20/2024");
+        await ui.inputSelector('input[id*="ReceiptDateRequested_input"]', moment().format("MM/DD/YY"));
 
-        await ui.inputSelector('input[id*="ShippingDateRequested_input"]', "11/18/2024");
+        await ui.inputSelector('input[id*="ShippingDateRequested_input"]', moment().format("MM/DD/YY"));
 
         await ui.button('OK');
 
@@ -74,7 +75,7 @@ test.describe('OV1_10_', () => {
 
         console.log(getSalesOrder);
 
-        await ui.clickElement('[id*="LineView_header"]');
+        await page.locator('li:has-text("Lines")').click();
 
         await ui.button('Pick and pack');
 
@@ -84,7 +85,7 @@ test.describe('OV1_10_', () => {
 
         await ui.button("Ok")
 
-        await ui.clickElement('[id*="Ok_label"]');
+        await ui.button("Ok", 1)
 
         await ui.button('Pick and pack');
 
@@ -108,12 +109,8 @@ test.describe('OV1_10_', () => {
 
         await ui.button('Post packing slip');
 
-        await ui.clickElement('[id*="SysBoxForm"][id*="No_label"]')
-
         await ui.button('OK')
 
-        await ui.clickElement('[id*="SysBoxForm"][id*="Ok"]')
-
-        await page.waitForTimeout(2000);
+        await ui.button('OK', 1)
     });
 });

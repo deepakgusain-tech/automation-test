@@ -135,17 +135,6 @@ test.describe('OV01_06', () => {
 
         await ui.selectBox('input[id*="InventTable_PdsVendorCheckItem_input"]', 'Not allowed');
 
-        const toggle = page.locator('[id$="_DropShipment_toggle"]');
-
-        await page.waitForTimeout(4000);
-
-        if (await toggle.getAttribute('aria-checked') === 'false') {
-            await toggle.press('Space');
-        }
-
-
-        await page.waitForTimeout(4000);
-
         await ui.lookupSelectWithIcon('input[id*="DefaultDropShipmentWarehouse_input"]', "TWD");
 
         await ui.lookupSelectWithIcon('input[id*="OrigCountryRegionId_input"]', "DEU");
@@ -178,7 +167,7 @@ test.describe('OV01_06', () => {
 
         await ui.clickElement('[id*="AddButtonInterClass_label"]')
 
-        await ui.lookupSelectWithIcon('input[id*="UnitOfMeasureConversionStandard_FromUnitOfMeasure_Symbol_input"]', "pl");
+        await ui.lookupSelectWithIcon('input[id*="UnitOfMeasureConversionStandard_FromUnitOfMeasure_Symbol_input"]', "ea");
 
         await ui.inputSelector('input[id*="UnitOfMeasureConversionStandard_Factor_input"]', "1000");
 
@@ -190,9 +179,21 @@ test.describe('OV01_06', () => {
 
         await page.waitForTimeout(5000);
 
-        await ui.button('Purchase');
+        const purchaseTab = page.getByRole('button', { name: 'Purchase', exact: true }).nth(1);
 
-        await ui.inputSelector('input[id*="CostBasePrice_Price_input"]', "5")
+        if (await purchaseTab.getAttribute('aria-expanded') === 'false') {
+            await purchaseTab.click();
+        }
+
+        await ui.inputSelector('input[id*="PurchaseBasePrice_Price"]', "5")
+        
+        const manageCostTab = page.getByRole('button', { name: 'Manage costs', exact: true });
+
+        if (await manageCostTab.getAttribute('aria-expanded') === 'false') {
+            await manageCostTab.click();
+        }
+
+        await ui.inputSelector('input[id*="CostBasePrice_Price"]', "5")
 
         await ui.button('Save');
 

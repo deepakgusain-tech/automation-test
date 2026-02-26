@@ -113,23 +113,21 @@ test.describe("OV1_09_UK – Create Purchase Order", () => {
 
     await ui.clickElement('span[id*="InventTransRegister_"][id*="ctrlUpdateButton_label"]')
 
-    // // input becomes readonly
+    // input becomes readonly
 
-    // await ui.button("Back", 1);
+    await ui.button("Back", 1);
 
-    // // click yes manuall
+    // click yes manuall
 
-    // await ui.button('Receive');
+    await ui.button('Receive');
 
-    // await ui.button('Product receipt');
+    await ui.button('Product receipt');
 
-    // const productRecieptNumber = "PRecp_01401";
+    const productRecieptNumber = "PRecp_" +  Math.floor(Math.random() * 1000).toString().padStart(3, '0');
 
-    // await ui.inputSelector('input[aria-label="Product receipt"]', productRecieptNumber)
+    await ui.inputSelector('input[aria-label="Product receipt"]', productRecieptNumber)
 
-    // await ui.button("OK")
-
-    await page.waitForTimeout(60000);
+    await ui.button("OK")
 
   });
 });
