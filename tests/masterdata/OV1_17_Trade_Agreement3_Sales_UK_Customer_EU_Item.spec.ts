@@ -1,11 +1,12 @@
 import { test, expect } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
+import { getData } from '../../utils/runtimedata';
 
 test.describe('OV1_17', () => {
     test('Trade Agreement3 Sales UK Customer EU Item', async ({ page }) => {
 
-        const productName = "OV1EUItemNumber5765";
-        const customer = "OV1UKCUST0323";
+        const productName = getData('productName(EU)');
+        const customer =  getData('customerAccount(UK)');
 
         // Navigate to the vendor list page and click the 'New' button
         await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=PriceDiscAdmTable_Purch', { waitUntil: 'networkidle' });

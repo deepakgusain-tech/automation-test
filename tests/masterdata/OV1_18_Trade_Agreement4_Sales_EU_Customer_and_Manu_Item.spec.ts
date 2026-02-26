@@ -1,12 +1,13 @@
 import { test, expect } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
 import moment from 'moment';
+import { getData } from '../../utils/runtimedata';
 
 test.describe('OV1_18', () => {
     test('Trade Agreement4 Sales EU Customer and Manu Item', async ({ page }) => {
 
-        const productName = "OV1EUItemNumber5765";
-        const customer = "OV1EUCUST2128";
+        const productName = getData('productName(EU)');
+        const customer = getData('customerAccount(EU)');
 
         // Navigate to the vendor list page and click the 'New' button
         await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=PriceDiscAdmTable_Purch', { waitUntil: 'networkidle' });
@@ -41,7 +42,7 @@ test.describe('OV1_18', () => {
 
         await ui.inputSelector('input[name="FromDate"]', moment().format('MM/DD/YY'));
 
-        await ui.inputSelector('input[name="ToDate"]',  moment().add(2, 'M').format('MM/DD/YY'));
+        await ui.inputSelector('input[name="ToDate"]', moment().add(2, 'M').format('MM/DD/YY'));
 
         await ui.lookupSelectWithIcon('input[aria-label="Item relation"]', productName);
 
@@ -61,7 +62,7 @@ test.describe('OV1_18', () => {
 
         const isChecked = await postedCheckbox.getAttribute('aria-checked');
 
-        if(isChecked) {
+        if (isChecked) {
             console.log("test case successfully completed");
         }
     });

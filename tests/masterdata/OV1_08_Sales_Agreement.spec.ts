@@ -1,7 +1,5 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
-const fs = require('fs');
-const path = require('path');
 import { getData } from '../../utils/runtimedata';
 
 test.describe('OV01_08', () => {

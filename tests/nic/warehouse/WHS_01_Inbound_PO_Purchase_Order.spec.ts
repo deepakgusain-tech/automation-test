@@ -1,7 +1,6 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import UIElement from '../../../utils/ui-elements';
-const fs = require('fs');
-const path = require('path');
+import { saveData } from '../../../utils/runtimedata';
 
 test.describe('WHS_01', () => {
     test('WHS_01_(Inbound PO)_Purchase_Order', async ({ page }) => {
@@ -32,13 +31,16 @@ test.describe('WHS_01', () => {
 
         await page.waitForLoadState('networkidle');
 
-        await page.waitForTimeout(2000);
-
         await ui.inputSelector('input[name="PurchTable_OrderAccount"]', vendor)
 
         await page.keyboard.press('Tab');
 
-        await page.waitForTimeout(5000);
+        await page.waitForTimeout(2000);
+
+        
+        let getPoNumber = await ui.getInputValue('input[name="PurchTable_PurchId"]')
+
+        console.log(getPoNumber);
 
         await ui.button('Ok');
 
@@ -54,7 +56,7 @@ test.describe('WHS_01', () => {
 
         await page.waitForLoadState("networkidle");
 
-        await ui.lookupSelectWithIcon('input[aria-label="Item number"]', "83-003")
+        await ui.lookupSelectWithIcon('input[aria-label="Item number"]', itemNumber)
 
         await ui.inputSelector('input[aria-label="Quantity"]', "36.00")
 
@@ -68,9 +70,13 @@ test.describe('WHS_01', () => {
 
         await page.waitForTimeout(2000);
 
-        const get = await ui.getInputValue('input[aria-label="Load ID"]')
+        const getLoadId = await ui.getInputValue('input[aria-label="Load ID"]')
 
-        console.log(get);
+        console.log(getLoadId);
+
+        saveData('loadId(WHS)', getLoadId as string);
+
+        saveData('poNumber(WHS)', getPoNumber as string);
 
         await ui.button("Back", 1);
     });

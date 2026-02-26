@@ -1,13 +1,14 @@
 import { test } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
 import moment from 'moment';
+import { getData } from '../../utils/runtimedata';
 
 test.describe('OV1_21', () => {
     test('Trade_Agreement6_Sales_Customer_C0674_Item_SIV000810_and_Manu_Item', async ({ page }) => {
 
         const productName = "SIV000810";
         const customer = "C0674";
-        const itemNumber = "OV1EUItemNumber5765"
+        const itemNumber =  getData('MANUFProduct(UK)');
 
         // Navigate to the vendor list page and click the 'New' button
         await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=PriceDiscAdmTable_Purch', { waitUntil: 'commit' });

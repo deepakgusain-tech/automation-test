@@ -1,7 +1,5 @@
 import { test, expect } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
-const fs = require('fs');
-const path = require('path');
 import { saveData } from '../../utils/runtimedata';
 
 test.describe('OV01_03', () => {
@@ -25,8 +23,8 @@ test.describe('OV01_03', () => {
         await expect(dialogTitle).toContainText('Create customer');
 
         let customerAccount = "OV1UKCUST" + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-        
-       
+
+
         // details section
         // Verify the 'Details' section header is visible and expanded by default
         const detailsHeader = page.locator('button:has-text("Details")').first();
@@ -77,7 +75,7 @@ test.describe('OV01_03', () => {
         const contactTab = page.getByRole('button', { name: 'Contact information', exact: true });
 
         if (await contactTab.getAttribute('aria-expanded') === 'false') {
-        await contactTab.click();
+            await contactTab.click();
         }
 
         await page.waitForTimeout(2000);
@@ -96,10 +94,10 @@ test.describe('OV01_03', () => {
 
         await page.waitForTimeout(2000);
 
-        await ui.lookupSelectWithIcon('input[id*="Roles_input"]', 'Business');
+        await ui.lookupSelectWithIconWithSelect('input[aria-labelledby*="Roles_label"]', "Business", "all");
 
         await ui.button("OK");
-      
+
         await page.waitForTimeout(2000);
 
         await ui.lookupSelectWithIcon('input[id*="StatisticsGroup_input"]', "ING");
@@ -124,6 +122,6 @@ test.describe('OV01_03', () => {
 
         await page.getByRole('button', { name: /Close/ }).nth(1).click();
 
-         saveData('customerAccount(UK)', customerAccount);
+        saveData('customerAccount(UK)', customerAccount);
     });
 });

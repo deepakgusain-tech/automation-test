@@ -1,13 +1,11 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import UIElement from '../../../utils/ui-elements';
-import moment from 'moment';
-const fs = require('fs');
-const path = require('path');
+import { getData } from '../../../utils/runtimedata';
 
-test.describe('WHS_01', () => {
-    test('WHS_01_(Inbound PO)_Purchase_Order', async ({ page }) => {
+test.describe('WHS_04', () => {
+    test('WHS_04__Inbound_Po_Purchase_Group_Put_Away_WHS_Depends_on_ID_1118', async ({ page }) => {
 
-        const licensePlate = "173943790000344439";
+        const licensePlate = getData("licensePlate(WHS)");
 
         await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ni01&mi=action:WHSWorkExecute', { waitUntil: 'commit' });
 
@@ -28,15 +26,17 @@ test.describe('WHS_01', () => {
 
         await ui.inputSelector('input[name="WHSWorkLicensePlateId"]', licensePlate);
 
-        await ui.button("Ok")        
+        await ui.button("Ok")
 
         await ui.button("Ok")
 
         await ui.button("Done")
 
+        await ui.inputSelector('input[name="LocVerification"]', "Choose")
+
         await ui.button("Ok")
 
-        const message = page.locator('[data-dyn-controlname="error"]', {hasText: 'Work Completed'});
+        const message = page.locator('[data-dyn-controlname="error"]', { hasText: 'Work Completed' });
 
         if (await message.count() > 0) {
             console.log('Work Completed');

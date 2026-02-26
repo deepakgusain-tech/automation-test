@@ -1,42 +1,25 @@
-import { test, expect } from "@playwright/test";
+import { test } from "@playwright/test";
 import UIElement from "../../../utils/ui-elements";
 import moment from "moment";
-const fs = require("fs");
-const path = require("path");
+import { getData } from "../../../utils/runtimedata";
 
-test.describe("WHS_01", () => {
-  test("WHS_01_(Inbound PO)_Purchase_Order", async ({ page }) => {
-    await page.goto(
-      "https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ni01&mi=PurchTableListPage",
-      { waitUntil: "domcontentloaded" },
-    );
+test.describe("WHS_05", () => {
+  test("WHS_05_Inbound_PO_Product_receipt_from_FNO_Depends_on_ID_1118", async ({ page }) => {
+    await page.goto("https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ni01&mi=PurchTableListPage", { waitUntil: "domcontentloaded" });
 
     let ui: UIElement | null = new UIElement(page);
 
-    const poNumber = "PO0000941";
+    const poNumber = getData("poNumber(WHS)");
 
-    await ui.filterOption(
-      'div[id*="PurchTable_PurchIdAdvanced_"][id*="_header"]',
-      'input[aria-label="Filter field: Purchase order, operator: is exactly"]',
-      poNumber,
-    );
+    await ui.filterOption('div[id*="PurchTable_PurchIdAdvanced_"][id*="_header"]', 'input[aria-label="Filter field: Purchase order, operator: is exactly"]', poNumber);
 
-    await ui.dateSelector(
-      'input[name="HeaderDelivery_DeliveryDate"]',
-      "02/24/2026",
-    );
+    await ui.dateSelector('input[name="HeaderDelivery_DeliveryDate"]', moment().format("MM/DD/YY"));
 
-    const warehouseBtn = page
-      .getByRole("button", { name: "Warehouse" })
-      .filter({ has: page.locator(":visible") })
-      .nth(1);
+    await page.waitForTimeout(2000);
 
-    await warehouseBtn.focus();
-    await warehouseBtn.press("Space");
+    await ui.button("Warehouse");
 
-    await ui.clickElement(
-      'span[id*="purchtablelistpage"][id*="WHSLoadTable_label"]',
-    );
+    await ui.clickElement('span[id*="purchtablelistpage"][id*="WHSLoadTable_label"]');
 
     await ui.button("Ship and receive");
 
@@ -50,17 +33,17 @@ test.describe("WHS_01", () => {
 
     await ui.button("OK");
 
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(4000);
 
-    const message = page.locator('.messageBar-message', {hasText: 'The packing slip completed successfully.'});
+    const message = page.locator('.messageBar-message', { hasText: 'The packing slip completed successfully.' });
 
     if (await message.count() > 0) {
-        console.log('message generated');
+      console.log('message generated');
     }
 
     await ui.button("Back", 1);
 
-    await ui.button("Back");
+    await ui.button("Back", 1);
 
     await page.waitForTimeout(60000);
   });

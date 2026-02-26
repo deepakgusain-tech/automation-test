@@ -7,8 +7,6 @@ import { getData } from '../../utils/runtimedata';
 test.describe("OV1_09_UK – Create Purchase Order", () => {
   test("Create, Register and Receive Purchase Order", async ({ page }) => {
 
-    // const supplierAccount = "S1691";
-    // const itemNumber = "OV1UKItemNumber1003";
     const site = "LE";
     const warehouse = "LE";
     const quantity = "1000";
@@ -17,9 +15,7 @@ test.describe("OV1_09_UK – Create Purchase Order", () => {
     const location = "Floor";
     const licensePlate = "00000000001786";
 
-    await page.goto(
-      "https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=PurchTableListPage"
-    );
+    await page.goto("https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=PurchTableListPage");
 
     const ui = new UIElement(page);
 

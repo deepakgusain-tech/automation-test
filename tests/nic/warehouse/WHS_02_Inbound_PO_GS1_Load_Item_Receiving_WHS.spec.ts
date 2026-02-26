@@ -1,16 +1,14 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import UIElement from '../../../utils/ui-elements';
 import moment from 'moment';
-const fs = require('fs');
-const path = require('path');
+import { getData, saveData } from '../../../utils/runtimedata';
 
-test.describe('WHS_01', () => {
-    test('WHS_01_(Inbound PO)_Purchase_Order', async ({ page }) => {
+test.describe('WHS_02', () => {
+    test('WHS_02_Inbound_PO_GS1_Load_Item_Receiving_WHS', async ({ page }) => {
 
-        const loadId = "LOAD008346";
+        const loadId = getData("loadId(WHS)");
         const itemNumber = "83-003";
         const batchNumber = "BH_" + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-
         console.log(batchNumber);
 
         await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ni01&mi=action:WHSWorkExecute');
@@ -54,7 +52,7 @@ test.describe('WHS_01', () => {
 
         await page.waitForTimeout(4000);
 
-        const message = page.locator('[data-dyn-controlname="error"]', {hasText: 'Work Completed'});
+        const message = page.locator('[data-dyn-controlname="error"]', { hasText: 'Work Completed' });
 
         if (await message.count() > 0) {
             console.log('Work Completed');
@@ -67,6 +65,9 @@ test.describe('WHS_01', () => {
         await ui.button("Log off")
 
         console.log("Test run successfully");
+
+        saveData('batchNumber(WHS)', batchNumber);
+
 
     });
 });

@@ -83,7 +83,7 @@ test.describe('OV1_07', () => {
         // step 20
         ui = null;
 
-         await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=EcoResProductDetailsExtendedGrid',  { waitUntil: 'domcontentloaded', timeout: 20000 });
+         await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=EcoResProductDetailsExtendedGrid',  { waitUntil: 'domcontentloaded', timeout: 60000 });
 
         ui = new UIElement(page);
 

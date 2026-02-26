@@ -1,7 +1,5 @@
 import { test, expect } from "@playwright/test";
 import UIElement from "../../utils/ui-elements";
-const fs = require("fs");
-const path = require("path");
 import { saveData } from '../../utils/runtimedata';
 
 test.describe("OV1_04", () => {
@@ -88,7 +86,7 @@ test.describe("OV1_04", () => {
 
     await page.waitForTimeout(2000);
 
-    await ui.lookupSelectWithIcon('input[id*="Roles_input"]', 'Business');
+    await ui.lookupSelectWithIconWithSelect('input[aria-labelledby*="Roles_label"]', "Business", "all");
 
     await ui.button("OK");
 

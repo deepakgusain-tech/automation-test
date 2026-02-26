@@ -54,22 +54,27 @@ export default class UIElement {
      * Click an element by button selector
      */
     async backButton(step: number = 0) {
-        const backBtn = this.page.locator('[class*="Back-symbol"]').nth(step);
+        const backBtn = this.page.getByRole('button', { name: new RegExp("Back", 'i') }).nth(step);
         await backBtn.click();
     }
+
     /**
      * Click an element by button selector
      */
     async button(buttonName: string, step: number = 0) {
-
         const element = this.page.getByRole('button', { name: new RegExp(buttonName, 'i') }).nth(step);
-        await element.click();
+        await element.focus()
+
+        if (await element.isVisible() && await element.isEnabled()) {
+            await element.click();
+        } else {
+            await element.press('Enter');
+        }
     }
 
     /**
     * Click an element by button selector
     */
-
     async clickElement(selector: string, step: number = 0) {
         const element = this.page.locator(selector).nth(step);
 
@@ -81,6 +86,14 @@ export default class UIElement {
         }
 
         await element.click({ force: true });
+    }
+
+    async dateSelector(selector: string, value: string, step: number = 0) {
+        const element = this.page.locator(selector).nth(step);
+
+        await element.fill(value);
+
+        await element.press("Tab");
     }
 
     /**
@@ -137,12 +150,44 @@ export default class UIElement {
         await handle.asElement()?.click();
     }
 
+
     /**
        * Lookup field selection with click icon
        * @param fieldSelector - The input field selector
        * @param value - The item to select from the dropdown
        */
-    async lookupSelectWithIcon(fieldSelector: string, value: string, step: number = 0) {  
+    async lookupSelectWithIconWithSelect(fieldSelector: string, value: string, select: string = "single", step: number = 0) {
+
+        const field = this.getLocator(fieldSelector).nth(step);
+
+        await field.focus();
+        await field.click();
+        await this.page.keyboard.press('Alt+ArrowDown');
+
+        await this.page.waitForTimeout(1000);
+
+        if (select === "all") {
+            const selectAllCheckbox = this.page.getByRole('checkbox', { name: 'Select or unselect all rows' });
+            await selectAllCheckbox.click();
+
+            await this.button("Select");
+        } else {
+            const inputField = this.page.locator(`input[value="${value}"]:visible`).first();
+
+            await inputField.waitFor({ state: 'visible' });
+            await inputField.scrollIntoViewIfNeeded();
+            await inputField.focus();
+
+            await inputField.press('Enter');
+        }
+    }
+
+    /**
+       * Lookup field selection with click icon
+       * @param fieldSelector - The input field selector
+       * @param value - The item to select from the dropdown
+       */
+    async lookupSelectWithIcon(fieldSelector: string, value: string, step: number = 0) {
 
         const field = this.getLocator(fieldSelector).nth(step);
 
@@ -160,21 +205,16 @@ export default class UIElement {
             await field.press('Control+A');
             await field.press('Backspace');
         }
-        
-        await field.fill('');
 
-        await this.page.keyboard.type(value, { delay: 2000 });
+        await this.page.keyboard.type(value, { delay: 1000 });
 
         const inputField = this.page.locator(`input[value="${value}"]:visible`).first();
 
-        // const html = await inputField.evaluate(el => el.outerHTML);
-        // console.log(html);
 
         await this.page.waitForTimeout(1000);
         await inputField.waitFor({ state: 'visible' });
         await inputField.scrollIntoViewIfNeeded();
         await inputField.focus();
-
         await inputField.press('Enter');
     }
 
@@ -201,7 +241,7 @@ export default class UIElement {
        * @param inputSelector - The input field selector
        * @param value - The item to select from the dropdown
        */
-    async filterOption(mainSelector: string, inputSelector: string, value: string, step: number = 0) {
+    async filterOption(mainSelector: string, inputSelector: string, value: string, operation: string = "enter", step: number = 0) {
         await this.page.locator(mainSelector).nth(step).click();
 
         await this.page.waitForLoadState('networkidle');
@@ -232,7 +272,15 @@ export default class UIElement {
 
         const inputField = this.page.locator(`input[value="${value}"]`).first();
 
-        await inputField.click();
+        if (operation === "enter") {
+            await inputField.waitFor({ state: 'visible' });
+            await inputField.scrollIntoViewIfNeeded();
+            await inputField.focus();
+            await inputField.press('Enter');
+
+        } else {
+            await inputField.click()
+        }
     }
 
     async close() {

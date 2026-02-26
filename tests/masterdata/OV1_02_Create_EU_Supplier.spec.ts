@@ -21,12 +21,7 @@ test.describe('OV1_02', () => {
     const identificationHeading = page.locator('text=Identification').first();
     await expect(identificationHeading).toBeVisible();
 
-    // const vendorAccountField = await ui.getInputValue('input[aria-labelledby*="AccountNum"]')
-    // console.log(vendorAccountField);
-
     const supplierId = await page.locator('input[name="Identification_AccountNum"]').inputValue();
-
-
 
     const vendorName = "OV1EUSUP" + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
     console.log(vendorName);
@@ -39,13 +34,11 @@ test.describe('OV1_02', () => {
 
     await ui.lookupSelectWithIcon('select[aria-labelledby*="SalesTax_TaxGroup"], input[aria-labelledby*="SalesTax_TaxGroup"]', "UK_VEU")
 
-
     const addressTab = page.getByRole('button', { name: 'Addresses', exact: true });
 
     if (await addressTab.getAttribute('aria-expanded') === 'false') {
       await addressTab.click();
     }
-
 
     await page.waitForTimeout(2000);
 
@@ -53,11 +46,9 @@ test.describe('OV1_02', () => {
 
     await ui.inputSelector('input[aria-labelledby*="Description_label"]', vendorName);
 
-    await ui.lookupSelectWithIcon('input[aria-labelledby*="Roles_label"]', "Business");
+    await ui.lookupSelectWithIconWithSelect('input[aria-labelledby*="Roles_label"]', "Business");
 
     await ui.lookupSelectWithIcon('input[aria-labelledby*="CountryRegionId_input"]', "DEU");
-
-    // await ui.button('Yes');
 
     await ui.inputSelector('input[aria-labelledby*="ZipCode_label"]', "CH-5621");
 
@@ -76,7 +67,6 @@ test.describe('OV1_02', () => {
     await page.waitForTimeout(2000);
     await ui.clickElement("button[name='NewContactInfo']");
 
-
     await ui.inputSelector('input[id*="ContactInfo_Description"]', 'Harry Bo');
 
     await ui.lookupSelectWithIcon('input[id*="ContactInfo_Type"]', 'Email Address');
@@ -89,13 +79,25 @@ test.describe('OV1_02', () => {
 
     await page.waitForTimeout(2000);
 
-    await ui.lookupSelectWithIcon('input[aria-labelledby*="Roles_label"]', "Business");
+    await ui.lookupSelectWithIconWithSelect('input[aria-labelledby*="Roles_label"]', "Business", "all");
 
     await ui.button('OK');
+
+    const purchasingDemographicsTab = page.getByRole('button', { name: 'Purchasing demographics', exact: true });
+
+    if (await purchasingDemographicsTab.getAttribute('aria-expanded') === 'false') {
+      await purchasingDemographicsTab.click();
+    }
 
     await ui.lookupSelectWithIcon('input[aria-labelledby*="Currency_Currency_input"]', "EUR")
 
     await ui.lookupSelectWithIcon('input[aria-labelledby*="MainContactWorker"]', "Miriam Menga")
+
+    const purchaseOrderDefaultsTab = page.getByRole('button', { name: 'Purchase order defaults', exact: true });
+
+    if (await purchaseOrderDefaultsTab.getAttribute('aria-expanded') === 'false') {
+      await purchaseOrderDefaultsTab.click();
+    }
 
     await ui.lookupSelectWithIcon('input[aria-labelledby*="PurchPoolId_label"]', "PO Conf")
 

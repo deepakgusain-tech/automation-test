@@ -3,14 +3,6 @@ import UIElement from '../../utils/ui-elements';
 import { getData } from '../../utils/runtimedata';
 import moment from 'moment';
 
-function formatDate(date: Date) {
-    const pad = (n: any) => String(n).padStart(2, '0');
-
-    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ` +
-        `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
-}
-
-
 test.describe('OV01_11', () => {
     test('direct delivery sales', async ({ page }) => {
 

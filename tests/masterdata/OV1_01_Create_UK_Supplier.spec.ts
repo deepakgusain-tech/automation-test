@@ -45,7 +45,7 @@ test.describe('OV1_01', () => {
 
     await ui.inputSelector('input[aria-labelledby*="Description_label"]', vendorName);
 
-    await ui.lookupSelectWithIcon('input[aria-labelledby*="Roles_label"]', "Business");
+    await ui.lookupSelectWithIconWithSelect('input[aria-labelledby*="Roles_label"]', "Business");
 
     await ui.lookupSelectWithIcon('input[aria-labelledby*="CountryRegionId_input"]', "GBR");
 
@@ -60,6 +60,12 @@ test.describe('OV1_01', () => {
     await ui.button('OK');
 
     await page.waitForTimeout(2000);
+
+    const contactTab = page.getByRole('button', { name: 'Contact information', exact: true });
+
+    if (await contactTab.getAttribute('aria-expanded') === 'false') {
+      await contactTab.click();
+    }
 
     await ui.clickElement("button[name='NewContactInfo']")
 
@@ -77,13 +83,25 @@ test.describe('OV1_01', () => {
 
     await page.waitForTimeout(2000);
 
-    await ui.lookupSelectWithIcon('input[aria-labelledby*="Roles_label"]', "Business");
+    await ui.lookupSelectWithIconWithSelect('input[aria-labelledby*="Roles_label"]', "Business", "all");
 
     await ui.button('OK');
+
+    const purchasingDemographicsTab = page.getByRole('button', { name: 'Purchasing demographics', exact: true });
+
+    if (await purchasingDemographicsTab.getAttribute('aria-expanded') === 'false') {
+      await purchasingDemographicsTab.click();
+    }
 
     await ui.lookupSelectWithIcon('input[aria-labelledby*="MainContactWorker"]', "Mark Dutton")
 
     await ui.viewLookup('select[aria-labelledby*="SalesTax_VATNum"], input[aria-labelledby*="SalesTax_VATNum"]', 'View details');
+
+    const purchaseOrderDefaultsTab = page.getByRole('button', { name: 'Purchase order defaults', exact: true });
+
+    if (await purchaseOrderDefaultsTab.getAttribute('aria-expanded') === 'false') {
+      await purchaseOrderDefaultsTab.click();
+    }
 
     await ui.clickElement('button[id*="TaxVATNumTable_"][id*="SystemDefinedNewButton"]');
 

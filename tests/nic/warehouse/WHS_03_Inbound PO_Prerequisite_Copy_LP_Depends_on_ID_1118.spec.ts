@@ -1,17 +1,16 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import UIElement from '../../../utils/ui-elements';
-const fs = require('fs');
-const path = require('path');
+import { getData, saveData } from '../../../utils/runtimedata';
 
-test.describe('WHS_01', () => {
-    test('WHS_01_(Inbound PO)_Purchase_Order', async ({ page }) => {
+test.describe('WHS_03', () => {
+    test('WHS_03_Inbound PO_Prerequisite_Copy_LP_Depends_on_ID_1118', async ({ page }) => {
 
         await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ni01&mi=WHSInventPhysicalOnhand');
 
         let ui: UIElement | null = new UIElement(page);
 
         const itemNumber = "83-003";
-        const batchNumber = "BH_077";
+        const batchNumber = getData("batchNumber(WHS)");
 
         await ui.button('Display dimensions');
 
@@ -41,8 +40,10 @@ test.describe('WHS_01', () => {
 
         console.log(licensePlate);
 
-        await ui.button("Back", 1)
+        await ui.backButton()
 
         console.log("Test run successfully");
+
+        saveData('licensePlate(WHS)', licensePlate as string);
     });
 });

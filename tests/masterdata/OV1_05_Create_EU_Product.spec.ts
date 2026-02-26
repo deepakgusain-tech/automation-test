@@ -1,7 +1,5 @@
 import { test, expect } from '@playwright/test';
 import UIElement from '../../utils/ui-elements';
-const fs = require('fs');
-const path = require('path');
 import { getData } from '../../utils/runtimedata';
 import { saveData } from '../../utils/runtimedata';
 
@@ -13,8 +11,6 @@ test.describe('OV1_05_Create_EU_Product', () => {
         let ui: UIElement | null = new UIElement(page);
         const productName = "OV1EUItemNumber" + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
         
-
-        console.log(productName);
         // step 1
         await ui.button('New');
 
@@ -35,7 +31,6 @@ test.describe('OV1_05_Create_EU_Product', () => {
         
         const productNumber = await page.locator('input[id*="Identification_ProductNumber_input"]').inputValue();
 
-        saveData('productNumber(EU)', productNumber);
         
         console.log(productNumber);
 
@@ -73,7 +68,9 @@ test.describe('OV1_05_Create_EU_Product', () => {
         await page.waitForLoadState('networkidle');
 
         // step 16
-        await ui.filterOption('[id*="CompanyInfo_DataAreaGrid"]', 'input[id*="DataAreaGrid_DataArea_Input"]', 'OV01');
+        await ui.filterOption('[id*="CompanyInfo_DataAreaGrid"]', 'input[id*="DataAreaGrid_DataArea_Input"]', 'OV01', "click");
+
+        await page.waitForTimeout(1000);
 
         // step 17
         await ui.button('Next');
@@ -89,7 +86,7 @@ test.describe('OV1_05_Create_EU_Product', () => {
         // step 20
         ui = null;
 
-         await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=EcoResProductDetailsExtendedGrid',  { waitUntil: 'domcontentloaded', timeout: 20000 });
+         await page.goto('https://orkla-uat2.sandbox.operations.dynamics.com/?cmp=ov01&mi=EcoResProductDetailsExtendedGrid',  { waitUntil: 'networkidle', timeout: 60000 });
 
         ui = new UIElement(page);
 
@@ -98,7 +95,6 @@ test.describe('OV1_05_Create_EU_Product', () => {
         await ui.filterOption('[id*="InventTable_ItemIdGrid"]', 'input[id*="ItemIdGrid_ItemId_Input"]', itemNumber);
         console.log(itemNumber);
         
-
         await ui.button('Product');
 
         await page.waitForLoadState('networkidle');
@@ -107,11 +103,9 @@ test.describe('OV1_05_Create_EU_Product', () => {
 
         await ui.filterOption('[id*="TmpSysTableTemplate_Description"]', 'input[id*="TmpSysTableTemplate_Description_Description_Input"]', "Traded Items Conf - KGs");
 
-        await page.waitForLoadState('networkidle');
+        await page.waitForTimeout(1000);
 
-        // await ui.button('Apply template');
-
-        await ui.button('Ok');
+        await ui.button('Ok', 1);
 
         await page.waitForLoadState('networkidle');
 
