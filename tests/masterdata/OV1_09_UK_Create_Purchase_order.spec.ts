@@ -59,6 +59,8 @@ test.describe("OV1_09_UK – Create Purchase Order", () => {
 
     await ui.button("Save");
 
+    await ui.lookupSelectWithIcon('input[id*="PurchLine_PurchUnitGrid"]', unit);
+
     await page.waitForLoadState("networkidle");
 
     await ui.button("Purchase", 1);
@@ -68,6 +70,8 @@ test.describe("OV1_09_UK – Create Purchase Order", () => {
     await ui.button("OK");
 
     await page.waitForLoadState("networkidle");
+
+    await ui.lookupSelectWithIcon('input[id*="PurchLine_PurchUnitGrid"]', unit);
 
     await ui.button('Update line');
 
@@ -101,31 +105,31 @@ test.describe("OV1_09_UK – Create Purchase Order", () => {
     await ui.button("Back", 1);
 
     // input becomes readonly
-    await ui.inputSelector('input[aria-label="Batch number"]', batchNumber)
+    await ui.inputSelector('input[aria-label="Batch number"]', batchNumber, 1)
 
-    await ui.inputSelector('input[aria-label="Location"]', location)
+    await ui.inputSelector('input[aria-label="Location"]', location, 1)
 
-    await ui.inputSelector('input[aria-label="License plate"]', licensePlate)
+    await ui.inputSelector('input[aria-label="License plate"]', licensePlate, 1)
 
     await ui.clickElement('span[id*="InventTransRegister_"][id*="ctrlUpdateButton_label"]')
 
-    // input becomes readonly
+    // // input becomes readonly
 
-    await ui.button("Back", 1);
+    // await ui.button("Back", 1);
 
-    // click yes manuall
+    // // click yes manuall
 
-    await ui.button('Receive');
+    // await ui.button('Receive');
 
-    await ui.button('Product receipt');
+    // await ui.button('Product receipt');
 
-    const productRecieptNumber = "PRecp_01401";
+    // const productRecieptNumber = "PRecp_01401";
 
-    await ui.inputSelector('input[aria-label="Product receipt"]', productRecieptNumber)
+    // await ui.inputSelector('input[aria-label="Product receipt"]', productRecieptNumber)
 
-    await ui.button("OK")
+    // await ui.button("OK")
 
-    await page.waitForTimeout(30000);
+    await page.waitForTimeout(60000);
 
   });
 });

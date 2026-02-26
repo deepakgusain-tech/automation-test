@@ -95,7 +95,7 @@ test.describe('OV01_06', () => {
 
         await ui.button('Apply template');
 
-        await ui.filterOption('[id*="TmpSysTableTemplate_Description"]', 'input[id*="TmpSysTableTemplate_Description_Description_Input"]', "Traded Items Conf - KGs");
+        await ui.filterOption('[id*="TmpSysTableTemplate_Description"]', 'input[id*="TmpSysTableTemplate_Description_Description_Input"]', "Traded Items Conf - KGs", "click");
 
         await page.waitForLoadState('networkidle');
 

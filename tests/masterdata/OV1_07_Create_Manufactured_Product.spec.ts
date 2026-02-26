@@ -97,7 +97,7 @@ test.describe('OV1_07', () => {
 
         await ui.button('Apply template');
 
-        await ui.filterOption('[id*="TmpSysTableTemplate_Description"]', 'input[id*="TmpSysTableTemplate_Description_Description_Input"]', "(SI) Finished Goods EA");
+        await ui.filterOption('[id*="TmpSysTableTemplate_Description"]', 'input[id*="TmpSysTableTemplate_Description_Description_Input"]', "(SI) Finished Goods EA", "click");
 
         await page.waitForLoadState('networkidle');
 

@@ -277,7 +277,6 @@ export default class UIElement {
             await inputField.scrollIntoViewIfNeeded();
             await inputField.focus();
             await inputField.press('Enter');
-
         } else {
             await inputField.click()
         }

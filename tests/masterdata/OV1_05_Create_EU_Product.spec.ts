@@ -101,11 +101,11 @@ test.describe('OV1_05_Create_EU_Product', () => {
 
         await ui.button('Apply template');
 
-        await ui.filterOption('[id*="TmpSysTableTemplate_Description"]', 'input[id*="TmpSysTableTemplate_Description_Description_Input"]', "Traded Items Conf - KGs");
+        await ui.filterOption('[id*="TmpSysTableTemplate_Description"]', 'input[id*="TmpSysTableTemplate_Description_Description_Input"]', "Traded Items Conf - KGs", "click");
 
         await page.waitForTimeout(1000);
 
-        await ui.button('Ok', 1);
+        await ui.button('Ok');
 
         await page.waitForLoadState('networkidle');
 
